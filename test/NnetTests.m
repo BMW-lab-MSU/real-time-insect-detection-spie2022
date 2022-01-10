@@ -41,13 +41,7 @@ classdef NnetTests < matlab.unittest.TestCase
     methods (Test)
         function testConvertedNetworkClassification(testCase)
 
-            trainingFeatures = varfun(@single, testCase.trainingFeatures);
-            trainingMean = varfun(@(f) mean(f, 'omitnan'), ...
-                trainingFeatures, 'OutputFormat', 'uniform');
-            trainingStd = varfun(@(f) std(f,'omitnan'), ... 
-                trainingFeatures, 'OutputFormat', 'uniform');
-
-            seriesNet = netToSeriesNetwork(testCase.ogModel, trainingMean, trainingStd);
+            seriesNet = convertNetToONNX(NnetTests.trainingDataDir, 'SaveONNX', false);
             
             ogPredictions = predict(testCase.ogModel, testCase.testingFeatures);
             
@@ -58,6 +52,25 @@ classdef NnetTests < matlab.unittest.TestCase
             seriesNetPredictionsLogical = seriesNetPredictions == 'true';
             
             testCase.verifyEqual(seriesNetPredictionsLogical, ogPredictions);
+        end
+
+        function testONNXModel(testCase)
+
+            onnxModelPath = NnetTests.modelDir + filesep + "nnet.onnx";
+
+            convertNetToONNX(NnetTests.trainingDataDir, 'SaveONNX', true);
+
+            onnxNet = importONNXNetwork(onnxModelPath, 'OutputLayerType', 'classification', 'Classes', categorical(logical([0 1])));
+
+            ogPredictions = predict(testCase.ogModel, testCase.testingFeatures);
+
+            onnxNetPredictions = classify(onnxNet, testCase.testingFeatures);
+
+            % convert categorical labels into loical labels to match the
+            % output of the original model
+            onnxNetPredictionsLogical = onnxNetPredictions == 'true';
+
+            testCase.verifyEqual(onnxNetPredictionsLogical, ogPredictions);
         end
     end
 end
