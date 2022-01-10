@@ -1,3 +1,4 @@
+function seriesNet = convertNetToONNX(trainingDir, opts)
 %% Convert the pre-trained neural network into an ONNX file
 % The CompactClassificationNeuralNetwork from the Statistics and Machine
 % Learning Toolbox was used to create and train the neural network
@@ -13,11 +14,14 @@
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+arguments
+    trainingDir (1,1) string
+    opts.SaveONNX (1,1) logical = true;
+end
 
 % Load pre-trained nerual network and training data
-baseDir = "../../data/insect-lidar/MLSP-2021/training";
-load(baseDir + filesep + "models" + filesep + "nnet")
-load(baseDir + filesep + "trainingData", 'trainingFeatures')
+load(trainingDir + filesep + "models" + filesep + "nnet")
+load(trainingDir + filesep + "trainingData", 'trainingFeatures')
 trainingFeatures = nestedcell2mat(trainingFeatures);
 
 % Compute the mean and standard deviation of the training data so we can set
@@ -31,7 +35,30 @@ trainingFeatures = varfun(@single, trainingFeatures);
 trainingMean = varfun(@(f) mean(f, 'omitnan'), trainingFeatures, 'OutputFormat', 'uniform');
 trainingStd = varfun(@(f) std(f,'omitnan'), trainingFeatures, 'OutputFormat', 'uniform');
 
-seriesNet = netToSeriesNetwork(model, trainingMean, trainingStd);
+% Create the layers/architecture for the DL Toolbox network
+layers = [
+    featureInputLayer(30, 'Normalization', 'zscore', 'Mean', trainingMean, ...
+        'StandardDeviation', trainingStd)
+    fullyConnectedLayer(13)
+    tanhLayer
+    fullyConnectedLayer(2)
+    softmaxLayer
+    classificationLayer('Classes', categorical(logical([0,1])))
+];
 
-% Export the model as an ONNX file so we can generate HDL with external tools
-exportONNXNetwork(seriesNet, baseDir + filesep + "models" + filesep + "nnet.onnx");
+% Set pre-trained weights and biases in the new network
+% NOTE: we can't set the weights/biases after the SeriesNetwork has been
+% created, so we set them in the layer objects before creating the network.
+% NOTE: I could set these in the layer constructor functions instead
+layers(2).Weights = model.LayerWeights{1};
+layers(4).Weights = model.LayerWeights{2};
+layers(2).Bias = model.LayerBiases{1};
+layers(4).Bias = model.LayerBiases{2};
+
+% Create the SeriesNetwork
+seriesNet = SeriesNetwork(layers);
+
+if opts.SaveONNX
+    % Export the model as an ONNX file so we can generate HDL with external tools
+    exportONNXNetwork(seriesNet, trainingDir + filesep + "models" + filesep + "nnet.onnx");
+end
