@@ -3,17 +3,20 @@ classdef NnetTests < matlab.unittest.TestCase
     properties (Constant)
        baseDir = "../../../data/insect-lidar/MLSP-2021";
        modelDir = NnetTests.baseDir + filesep + "training" + filesep + "models";
-       dataDir = NnetTests.baseDir + filesep + "testing";
+       testingDataDir = NnetTests.baseDir + filesep + "testing";
+       trainingDataDir = NnetTests.baseDir + filesep + "training";
     end
     
        
     properties (TestParameter)
-        data = load(NnetTests.dataDir + filesep + "testingData", 'testingFeatures').testingFeatures;
+        testingData = load(NnetTests.testingDataDir + filesep + "testingData", 'testingFeatures').testingFeatures;
+        trainingData = load(NnetTests.trainingDataDir + filesep + "trainingData", 'trainingFeatures').trainingFeatures;
     end
     
     properties
         ogModel;
-        features;
+        testingFeatures;
+        trainingFeatures;
     end
     
     methods (TestClassSetup)
@@ -30,19 +33,31 @@ classdef NnetTests < matlab.unittest.TestCase
         end
         
         function unnestFeatures(testCase)
-            testCase.features = nestedcell2mat(testCase.data);
+            testCase.testingFeatures = nestedcell2mat(testCase.testingData);
+            testCase.trainingFeatures = nestedcell2mat(testCase.trainingData);
         end
     end
     
     methods (Test)
         function testConvertedNetworkClassification(testCase)
-            seriesNet = netToSeriesNetwork(testCase.ogModel);
+
+            trainingFeatures = varfun(@single, testCase.trainingFeatures);
+            trainingMean = varfun(@(f) mean(f, 'omitnan'), ...
+                trainingFeatures, 'OutputFormat', 'uniform');
+            trainingStd = varfun(@(f) std(f,'omitnan'), ... 
+                trainingFeatures, 'OutputFormat', 'uniform');
+
+            seriesNet = netToSeriesNetwork(testCase.ogModel, trainingMean, trainingStd);
             
-            ogPredictions = predict(testCase.ogModel, testCase.features);
+            ogPredictions = predict(testCase.ogModel, testCase.testingFeatures);
             
-            seriesNetPredictions = classify(seriesNet, testCase.features);
+            seriesNetPredictions = classify(seriesNet, testCase.testingFeatures);
+
+            % convert categorical labels into logical labels to match the
+            % output of the original model
+            seriesNetPredictionsLogical = seriesNetPredictions == 'true';
             
-            testCase.verifyIsEqual(ogPredictions, seriesNetPredictions);
+            testCase.verifyEqual(seriesNetPredictionsLogical, ogPredictions);
         end
     end
 end
