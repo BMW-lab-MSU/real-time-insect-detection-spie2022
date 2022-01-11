@@ -36,13 +36,13 @@ peakLoc = cell(nRows, 1);
 peakWidth = cell(nRows, 1);
 peakProminence = cell(nRows, 1);
 
-harmonicHeight = nan(nRows, nHarmonics);
-harmonicLoc = nan(nRows, nHarmonics);
-harmonicWidth = nan(nRows, nHarmonics);
-harmonicProminence = nan(nRows, nHarmonics);
-harmonicHeightRatio = nan(nRows, nHarmonicCombinations);
-harmonicWidthRatio = nan(nRows, nHarmonicCombinations);
-harmonicProminenceRatio = nan(nRows, nHarmonicCombinations);
+harmonicHeight = nan(nRows, nHarmonics, 'like', psd);
+harmonicLoc = nan(nRows, nHarmonics, 'like', psd);
+harmonicWidth = nan(nRows, nHarmonics, 'like', psd);
+harmonicProminence = nan(nRows, nHarmonics, 'like', psd);
+harmonicHeightRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
+harmonicWidthRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
+harmonicProminenceRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
 
 fundamental = estimateFundamentalFreq(psd, 'UseParallel', opts.UseParallel);
 
@@ -55,6 +55,10 @@ end
 parfor (i = 1:nRows, nWorkers)
     % Get features for all peaks
     [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findpeaks(psd(i,:));
+    peakHeight{i} = single(peakHeight{i});
+    peakLoc{i} = single(peakLoc{i});
+    peakWidth{i} = single(peakWidth{i});
+    peakProminence{i} = single(peakProminence{i});
 end
 
 for i = 1:nRows

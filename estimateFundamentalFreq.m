@@ -13,7 +13,7 @@ arguments
     opts.UseParallel (1,1) logical = false
 end
 
-fundamental = zeros(height(psd), 1);
+fundamental = zeros(height(psd), 1, 'like', psd);
 
 hps = harmonicProductSpectrum(psd, 3);
 
