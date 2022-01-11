@@ -9,7 +9,7 @@ end
 % Set random number generator properties for reproducibility
 rng(0, 'twister');
 
-datadir = '../data/insect-lidar/';
+datadir = '../../data/insect-lidar/';
 datafile = 'scans.mat';
 
 %% Load data
