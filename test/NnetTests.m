@@ -4,19 +4,15 @@ classdef NnetTests < matlab.unittest.TestCase
        baseDir = "../../../data/insect-lidar";
        modelDir = NnetTests.baseDir + filesep + "training" + filesep + "models";
        testingDataDir = NnetTests.baseDir + filesep + "testing";
-       trainingDataDir = NnetTests.baseDir + filesep + "training";
     end
-    
-       
+
     properties (TestParameter)
         testingData = load(NnetTests.testingDataDir + filesep + "testingData", 'testingFeatures').testingFeatures;
-        trainingData = load(NnetTests.trainingDataDir + filesep + "trainingData", 'trainingFeatures').trainingFeatures;
     end
     
     properties
         ogModel;
-        testingFeatures;
-        trainingFeatures;
+        features;
     end
     
     methods (TestClassSetup)
@@ -25,37 +21,74 @@ classdef NnetTests < matlab.unittest.TestCase
            testCase.addTeardown(@path, p);
            addpath('../');
         end
-    end
-    
-    methods (TestMethodSetup)
+
         function loadOriginalModel(testCase)
             testCase.ogModel = load(NnetTests.modelDir + filesep + "nnet").model;
         end
         
-        function unnestFeatures(testCase)
-            testCase.testingFeatures = nestedcell2mat(testCase.testingData);
-            testCase.trainingFeatures = nestedcell2mat(testCase.trainingData);
+        function formatFeatureMatrix(testCase)
+            % combine features from all images into a single table
+            featuresTable = nestedcell2mat(testCase.testingData);
+
+            % nnetInference() doesn't support tables, so convert to a matrix.
+            % Plus, an FPGA can't support tables either...
+            testCase.features = table2array(featuresTable);
         end
     end
     
     methods (Test)
-        function testInference(testCase)
+        function testPredictedLabelsNans(testCase)
+            % See if settings nans to zero returns the same predictions as 
+            % leaving the nans as-is
             
-            features = table2array(testCase.testingFeatures);
-            
-            features(isnan(features)) = 0;
-
-            [ogPredictions, ogScores] = predict(testCase.ogModel, features);
+            ogPredictions = predict(testCase.ogModel, testCase.features);
             
             newPredictions = false(size(ogPredictions));
-            newScores = zeros(size(ogScores), 'like', ogScores);
+
+            % nnetInference() doesn't support nans
+            testCase.features(isnan(testCase.features)) = 0;
             
-            for i = 1:height(features)
-                [newPredictions(i), newScores(i,:)] = nnetInference(features(i,:));
+            for i = 1:height(testCase.features)
+                newPredictions(i) = nnetInference(testCase.features(i,:));
             end
 
             testCase.verifyEqual(newPredictions, ogPredictions);
         end
 
+        function testPredictedLabels(testCase)
+            % Test if the labels match when nans are replaced with 0 for both
+            % models
+            
+            % nnetInference() doesn't support nans
+            testCase.features(isnan(testCase.features)) = 0;
+
+            ogPredictions = predict(testCase.ogModel, testCase.features);
+            
+            newPredictions = false(size(ogPredictions));
+
+            for i = 1:height(testCase.features)
+                newPredictions(i) = nnetInference(testCase.features(i,:));
+            end
+
+            testCase.verifyEqual(newPredictions, ogPredictions);
+        end
+
+        function testPredictedScores(testCase)
+            % Verify that the predicted posterior probabilities differ by no
+            % more than 5% between the models
+            
+            % nnetInference() doesn't support nans
+            testCase.features(isnan(testCase.features)) = 0;
+
+            [~, ogScores] = predict(testCase.ogModel, testCase.features);
+            
+            newScores = zeros(size(ogScores), 'like', ogScores);
+
+            for i = 1:height(testCase.features)
+                [~, newScores(i,:)] = nnetInference(testCase.features(i,:));
+            end
+
+            testCase.verifyLessThanOrEqual(abs(newScores - ogScores), 0.05);
+        end
     end
 end
