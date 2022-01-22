@@ -1,4 +1,4 @@
-function [label, scores] = nnetInferenceHDL(data)
+function label = nnetInferenceHDL(data)
 
 % INFO: loading compile-time constants from a MAT file:
 % https://www.mathworks.com/help/hdlcoder/ug/load-constants-from-a-mat-file.html
@@ -16,12 +16,9 @@ biasesLayer2 = codegenConstants.biasesLayer2;
 trainingMean = codegenConstants.trainingMean;
 trainingStdInv = codegenConstants.trainingStdInv;
 
-% transpose so we are working with column vectors
-% TODO: this transpose really isn't necessary, and I should probably
-%       get rid of it before converting to HDL
-x0 = ((data - trainingMean) .* trainingStdInv)';
+x0 = ((data - trainingMean) .* trainingStdInv);
 
-s1 = weightsLayer1 * x0 + biasesLayer1;
+s1 = x0 * weightsLayer1 + biasesLayer1;
 
 % The fixed-point designer toolbox can only create 1D lookup tables so we have
 % to call tanh on scalars instead of vectors in order to be able to
@@ -31,15 +28,13 @@ for i = 1:numel(x1)
     x1(i) = tanh(s1(i));
 end
 
-s2 = weightsLayer2 * x1 + biasesLayer2;
+s2 = x1 * weightsLayer2 + biasesLayer2;
 
-[x21, x22] = softmax(s2(1), s2(2));
+[score1, score2] = softmax(s2(1), s2(2));
 
-scores = [x21, x22];
-
-% The classes are [non-insect, insect], in that order, so scores(1) >= scores(2)
+% The classes are [non-insect, insect], in that order, so score1 >= score2
 % means that the predicted class is "non-insect" (false).
-if scores(1) >= scores(2)
+if score1 >= score2
     label = false;
 else
     label = true;
