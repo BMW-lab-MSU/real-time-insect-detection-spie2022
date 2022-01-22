@@ -15,11 +15,11 @@
     <param.hdl.WorkingSpecifiedDirectory />
     <param.hdl.BuildDirectory>option.hdl.ProjectDirectory</param.hdl.BuildDirectory>
     <param.hdl.BuildSpecifiedDirectory />
-    <param.fixptconv.InstrumentedMexFile>${PROJECT_ROOT}/codegen/nnetInference/fixpt/nnetInference_float_mex.mexa64</param.fixptconv.InstrumentedMexFile>
-    <param.fixptconv.InstrumentedBuildChecksum>3976070478</param.fixptconv.InstrumentedBuildChecksum>
+    <param.fixptconv.InstrumentedMexFile>${PROJECT_ROOT}/codegen/nnetInferenceHDL/fixpt/nnetInferenceHDL_float_mex.mexa64</param.fixptconv.InstrumentedMexFile>
+    <param.fixptconv.InstrumentedBuildChecksum>2330908415</param.fixptconv.InstrumentedBuildChecksum>
     <param.fixptconv.ShowCoverage>true</param.fixptconv.ShowCoverage>
-    <param.fixptconv.FixedPointValidationChecksum>4152225872</param.fixptconv.FixedPointValidationChecksum>
-    <param.fixptconv.FixedPointSourceCodeChecksum>1959875561</param.fixptconv.FixedPointSourceCodeChecksum>
+    <param.fixptconv.FixedPointValidationChecksum>2482723011</param.fixptconv.FixedPointValidationChecksum>
+    <param.fixptconv.FixedPointSourceCodeChecksum>2242622999</param.fixptconv.FixedPointSourceCodeChecksum>
     <param.fixptconv.FixedPointStaticAnalysisChecksum />
     <param.fixptconv.DefaultTestFile>${PROJECT_ROOT}/nnetInference_tb.m</param.fixptconv.DefaultTestFile>
     <param.fixptconv.ExcludedFixedPointVerificationFiles />
@@ -32,7 +32,7 @@
     <param.fixptconv.ProposeUsingDesignMinMaxAnd>option.fixptconv.ProposeUsingDesignMinMaxAnd.SimAndDerivedMinMax</param.fixptconv.ProposeUsingDesignMinMaxAnd>
     <param.transformedVariables>
       <UserEntities>
-        <Function file="$(PROJECTDIR)/nnetInference.m" name="nnetInference" specialization="nnetInference" specializationId="-1" uniqueId="nnetInference">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="nnetInferenceHDL" specialization="nnetInferenceHDL" specializationId="-1" uniqueId="nnetInferenceHDL">
           <Variable name="label" specid="-1">
             <Column property="LoggingEnabled" type="Boolean" value="true" />
           </Variable>
@@ -63,7 +63,7 @@
           <Variable name="x21" specid="-1" />
           <Variable name="x22" specid="-1" />
         </Function>
-        <Function file="$(PROJECTDIR)/nnetInference.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
           <Variable name="out1" specid="-1" />
           <Variable name="out2" specid="-1" />
           <Variable name="in1" specid="-1" />
@@ -75,7 +75,7 @@
     </param.transformedVariables>
     <param.computedVariables>
       <ComputedEntities>
-        <Function file="$(PROJECTDIR)/nnetInference.m" name="nnetInference" specialization="nnetInference" specializationId="-1" uniqueId="nnetInference">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="nnetInferenceHDL" specialization="nnetInferenceHDL" specializationId="-1" uniqueId="nnetInferenceHDL">
           <Variable name="label" specid="-1">
             <Column property="Kind" type="String" value="output" />
             <Column property="SimMin" type="Double" value="0.0" />
@@ -527,7 +527,7 @@
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
         </Function>
-        <Function file="$(PROJECTDIR)/nnetInference.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
           <Variable name="out1" specid="-1">
             <Column property="Kind" type="String" value="output" />
             <Column property="SimMin" type="Double" value="0.001560619450174272" />
@@ -684,10 +684,10 @@
     <var.lastFixedPointAction>option.fixedPointAction.verify</var.lastFixedPointAction>
     <var.lastSimContext>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;SimulationContext&gt;&lt;testFiles&gt;&lt;file&gt;/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/nnetInference_tb.m&lt;/file&gt;&lt;/testFiles&gt;&lt;synthetic&gt;false&lt;/synthetic&gt;&lt;/SimulationContext&gt;</var.lastSimContext>
     <var.lastVerifyContext>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;SimulationContext&gt;&lt;testFiles&gt;&lt;file&gt;/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/nnetInference_tb.m&lt;/file&gt;&lt;/testFiles&gt;&lt;syntheticCode&gt;&lt;/syntheticCode&gt;&lt;synthetic&gt;false&lt;/synthetic&gt;&lt;/SimulationContext&gt;</var.lastVerifyContext>
-    <param.fpDataRoot>/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/codegen/nnetInference/fixpt/guiFpReport.mat</param.fpDataRoot>
+    <param.fpDataRoot>/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/codegen/nnetInferenceHDL/fixpt/guiFpReport.mat</param.fpDataRoot>
     <param.fpUserFileChecksum />
-    <var.snapshotChecksum>3665818923</var.snapshotChecksum>
-    <param.fpLastConvertChecksum>3976070478</param.fpLastConvertChecksum>
+    <var.snapshotChecksum>933293443</var.snapshotChecksum>
+    <param.fpLastConvertChecksum>2330908415</param.fpLastConvertChecksum>
     <var.FixedPointAnalysisMode>option.FixedPointAnalysisMode.Sim</var.FixedPointAnalysisMode>
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
     <param.hdl.Workflow>option.workflow.GenericAsicFpga</param.hdl.Workflow>
@@ -697,7 +697,7 @@
     <param.hdl.TargetFrequency>100</param.hdl.TargetFrequency>
     <param.hdl.ReferenceDesign />
     <param.hdl.ReferenceDesignPath />
-    <param.hdl.IPCoreName>nnetinference_fixpt_ipcore</param.hdl.IPCoreName>
+    <param.hdl.IPCoreName>nnetinferencehdl_fixpt_ipcore</param.hdl.IPCoreName>
     <param.hdl.IPCoreVersion>1.0</param.hdl.IPCoreVersion>
     <param.hdl.AdditionalIPFiles />
     <param.hdl.ExecutionMode>option.hdl.FreeRunning</param.hdl.ExecutionMode>
@@ -892,7 +892,6 @@
       <param.hdl.BuildDirectory />
       <param.hdl.BuildSpecifiedDirectory />
       <param.fixptconv.ShowCoverage />
-      <param.fixptconv.FixedPointStaticAnalysisChecksum />
       <param.fixptconv.ExcludedFixedPointVerificationFiles />
       <param.fixptconv.ExcludedFixedPointSimulationFiles />
       <param.fixptconv.DefaultFixptWordLength />
@@ -1091,8 +1090,8 @@
       <param.hdl.BitstreamBuildMode />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/nnetInference.m">
-        <Inputs fileName="nnetInference.m" functionName="nnetInference">
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/nnetInferenceHDL.m">
+        <Inputs fileName="nnetInferenceHDL.m" functionName="nnetInferenceHDL">
           <Input Name="data">
             <Class>single</Class>
             <Size>1 x 30</Size>

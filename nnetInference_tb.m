@@ -13,5 +13,5 @@ labels = false(height(features), 1);
 scores = zeros(height(features), 2, 'single');
 
 for i = 1:height(features)
-    [labels(i), scores(i,:)] = nnetInference(features(i,:));
+    [labels(i), scores(i,:)] = nnetInferenceHDL(features(i,:));
 end
