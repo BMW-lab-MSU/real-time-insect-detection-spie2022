@@ -90,21 +90,5 @@ classdef NnetTests < matlab.unittest.TestCase
 
             testCase.verifyLessThanOrEqual(abs(newScores - ogScores), 0.05);
         end
-
-        function testPredictedLabelsFixpt(testCase)
-            % Verify that the fixed point implementation predicts the same labels
-
-            testCase.features(isnan(testCase.features)) = 0;
-
-            ogPredictions = predict(testCase.ogModel, testCase.features);
-            
-            newPredictions = false(size(ogPredictions));
-
-            for i = 1:height(testCase.features)
-                newPredictions(i) = nnetInference_wrapper_fixpt_mex('nnetInference_wrapper_fixpt', testCase.features(i,:));
-            end
-
-            testCase.verifyEqual(newPredictions, ogPredictions);
-        end
     end
 end
