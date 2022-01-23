@@ -16,10 +16,10 @@
     <param.hdl.BuildDirectory>option.hdl.ProjectDirectory</param.hdl.BuildDirectory>
     <param.hdl.BuildSpecifiedDirectory />
     <param.fixptconv.InstrumentedMexFile>${PROJECT_ROOT}/codegen/nnetInferenceHDL/fixpt/nnetInferenceHDL_float_mex.mexa64</param.fixptconv.InstrumentedMexFile>
-    <param.fixptconv.InstrumentedBuildChecksum>2330908415</param.fixptconv.InstrumentedBuildChecksum>
+    <param.fixptconv.InstrumentedBuildChecksum>890293344</param.fixptconv.InstrumentedBuildChecksum>
     <param.fixptconv.ShowCoverage>true</param.fixptconv.ShowCoverage>
-    <param.fixptconv.FixedPointValidationChecksum>2482723011</param.fixptconv.FixedPointValidationChecksum>
-    <param.fixptconv.FixedPointSourceCodeChecksum>2242622999</param.fixptconv.FixedPointSourceCodeChecksum>
+    <param.fixptconv.FixedPointValidationChecksum>3731171661</param.fixptconv.FixedPointValidationChecksum>
+    <param.fixptconv.FixedPointSourceCodeChecksum>3315740643</param.fixptconv.FixedPointSourceCodeChecksum>
     <param.fixptconv.FixedPointStaticAnalysisChecksum />
     <param.fixptconv.DefaultTestFile>${PROJECT_ROOT}/nnetInference_tb.m</param.fixptconv.DefaultTestFile>
     <param.fixptconv.ExcludedFixedPointVerificationFiles />
@@ -36,34 +36,25 @@
           <Variable name="label" specid="-1">
             <Column property="LoggingEnabled" type="Boolean" value="true" />
           </Variable>
-          <Variable name="scores" specid="-1">
-            <Column property="LoggingEnabled" type="Boolean" value="true" />
-          </Variable>
           <Variable name="data" specid="-1">
             <Column property="LoggingEnabled" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants" specid="-1" />
-          <Variable name="codegenConstants.biasesLayer1" specid="-1" />
-          <Variable name="codegenConstants.biasesLayer2" specid="-1" />
-          <Variable name="codegenConstants.trainingMean" specid="-1" />
-          <Variable name="codegenConstants.trainingStdInv" specid="-1" />
-          <Variable name="codegenConstants.weightsLayer1" specid="-1" />
-          <Variable name="codegenConstants.weightsLayer2" specid="-1" />
-          <Variable name="weightsLayer1" specid="-1" />
-          <Variable name="weightsLayer2" specid="-1" />
-          <Variable name="biasesLayer1" specid="-1" />
-          <Variable name="biasesLayer2" specid="-1" />
-          <Variable name="trainingMean" specid="-1" />
-          <Variable name="trainingStdInv" specid="-1" />
+          <Variable name="constants" specid="-1" />
+          <Variable name="constants.biasesLayer1" specid="-1" />
+          <Variable name="constants.biasesLayer2" specid="-1" />
+          <Variable name="constants.trainingMean" specid="-1" />
+          <Variable name="constants.trainingStdInv" specid="-1" />
+          <Variable name="constants.weightsLayer1" specid="-1" />
+          <Variable name="constants.weightsLayer2" specid="-1" />
           <Variable name="x0" specid="-1" />
           <Variable name="s1" specid="-1" />
           <Variable name="x1" specid="-1" />
           <Variable name="i" specid="-1" />
           <Variable name="s2" specid="-1" />
-          <Variable name="x21" specid="-1" />
-          <Variable name="x22" specid="-1" />
+          <Variable name="score1" specid="-1" />
+          <Variable name="score2" specid="-1" />
         </Function>
-        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f36_softmax">
           <Variable name="out1" specid="-1" />
           <Variable name="out2" specid="-1" />
           <Variable name="in1" specid="-1" />
@@ -97,27 +88,6 @@
             <Column property="CastBeforeSum" type="Boolean" value="true" />
             <Column property="NumericalError" type="Double" value="0.0" />
           </Variable>
-          <Variable name="scores" specid="-1">
-            <Column property="Kind" type="String" value="output" />
-            <Column property="SimMin" type="Double" value="9.004492653730267E-7" />
-            <Column property="SimMax" type="Double" value="0.9999990463256836" />
-            <MATLABType class="single" complex="false">
-              <size>1</size>
-              <size>2</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(0, 22, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-            <Column property="NumericalError" type="Double" value="0.06175285577774048" />
-          </Variable>
           <Variable name="data" specid="-1">
             <Column property="Kind" type="String" value="input" />
             <Column property="SimMin" type="Double" value="-5.572357177734375" />
@@ -139,20 +109,20 @@
             <Column property="CastBeforeSum" type="Boolean" value="true" />
             <Column property="NumericalError" type="Double" value="2.3841796803480975E-7" />
           </Variable>
-          <Variable name="codegenConstants" specid="-1">
-            <Column property="Kind" type="String" value="persistent" />
+          <Variable name="constants" specid="-1">
+            <Column property="Kind" type="String" value="local" />
             <MATLABType class="struct" complex="false">
               <size>1</size>
               <size>1</size>
             </MATLABType>
           </Variable>
-          <Variable name="codegenConstants.biasesLayer1" specid="-1">
+          <Variable name="constants.biasesLayer1" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="-0.6977235674858093" />
             <Column property="SimMax" type="Double" value="0.7132183313369751" />
             <MATLABType class="single" complex="false">
-              <size>13</size>
               <size>1</size>
+              <size>13</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
@@ -166,13 +136,13 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants.biasesLayer2" specid="-1">
+          <Variable name="constants.biasesLayer2" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="-0.8599938154220581" />
             <Column property="SimMax" type="Double" value="0.8589796423912048" />
             <MATLABType class="single" complex="false">
-              <size>2</size>
               <size>1</size>
+              <size>2</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
@@ -186,7 +156,7 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants.trainingMean" specid="-1">
+          <Variable name="constants.trainingMean" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="6.59437088268433E-11" />
             <Column property="SimMax" type="Double" value="203.89747619628906" />
@@ -206,7 +176,7 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants.trainingStdInv" specid="-1">
+          <Variable name="constants.trainingStdInv" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="1.3433172716759145E-4" />
             <Column property="SimMax" type="Double" value="1037810.4375" />
@@ -226,13 +196,13 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants.weightsLayer1" specid="-1">
+          <Variable name="constants.weightsLayer1" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="-0.42823630571365356" />
             <Column property="SimMax" type="Double" value="0.33163484930992126" />
             <MATLABType class="single" complex="false">
-              <size>13</size>
               <size>30</size>
+              <size>13</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 22, 22)" />
@@ -246,136 +216,16 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="codegenConstants.weightsLayer2" specid="-1">
+          <Variable name="constants.weightsLayer2" specid="-1">
             <Column property="Kind" type="String" value="field" />
             <Column property="SimMin" type="Double" value="-0.7635452151298523" />
             <Column property="SimMax" type="Double" value="0.7631188035011292" />
             <MATLABType class="single" complex="false">
+              <size>13</size>
               <size>2</size>
-              <size>13</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="weightsLayer1" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="-0.42823630571365356" />
-            <Column property="SimMax" type="Double" value="0.33163484930992126" />
-            <MATLABType class="single" complex="false">
-              <size>13</size>
-              <size>30</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(1, 22, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="weightsLayer2" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="-0.7635452151298523" />
-            <Column property="SimMax" type="Double" value="0.7631188035011292" />
-            <MATLABType class="single" complex="false">
-              <size>2</size>
-              <size>13</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="biasesLayer1" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="-0.6977235674858093" />
-            <Column property="SimMax" type="Double" value="0.7132183313369751" />
-            <MATLABType class="single" complex="false">
-              <size>13</size>
-              <size>1</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="biasesLayer2" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="-0.8599938154220581" />
-            <Column property="SimMax" type="Double" value="0.8589796423912048" />
-            <MATLABType class="single" complex="false">
-              <size>2</size>
-              <size>1</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(1, 23, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="trainingMean" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="6.59437088268433E-11" />
-            <Column property="SimMax" type="Double" value="203.89747619628906" />
-            <MATLABType class="single" complex="false">
-              <size>1</size>
-              <size>30</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(0, 30, 22)" />
-            <Column property="RoundMode" type="String" value="Floor" />
-            <Column property="OverflowMode" type="String" value="Wrap" />
-            <Column property="ProductMode" type="String" value="FullPrecision" />
-            <Column property="ProductWordLength" type="Double" value="32" />
-            <Column property="ProductFractionLength" type="Double" value="30" />
-            <Column property="SumMode" type="String" value="FullPrecision" />
-            <Column property="SumWordLength" type="Double" value="32" />
-            <Column property="SumFractionLength" type="Double" value="30" />
-            <Column property="CastBeforeSum" type="Boolean" value="true" />
-          </Variable>
-          <Variable name="trainingStdInv" specid="-1">
-            <Column property="Kind" type="String" value="local" />
-            <Column property="SimMin" type="Double" value="1.3433172716759145E-4" />
-            <Column property="SimMax" type="Double" value="1037810.4375" />
-            <MATLABType class="single" complex="false">
-              <size>1</size>
-              <size>30</size>
-            </MATLABType>
-            <Column property="IsInteger" type="Boolean" value="false" />
-            <Column property="ProposedType" type="String" value="numerictype(0, 42, 22)" />
             <Column property="RoundMode" type="String" value="Floor" />
             <Column property="OverflowMode" type="String" value="Wrap" />
             <Column property="ProductMode" type="String" value="FullPrecision" />
@@ -391,8 +241,8 @@
             <Column property="SimMin" type="Double" value="-316.4316101074219" />
             <Column property="SimMax" type="Double" value="871.4511108398438" />
             <MATLABType class="single" complex="false">
-              <size>30</size>
               <size>1</size>
+              <size>30</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 33, 22)" />
@@ -411,8 +261,8 @@
             <Column property="SimMin" type="Double" value="-227.43569946289062" />
             <Column property="SimMax" type="Double" value="187.61509704589844" />
             <MATLABType class="single" complex="false">
-              <size>13</size>
               <size>1</size>
+              <size>13</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 31, 22)" />
@@ -431,8 +281,8 @@
             <Column property="SimMin" type="Double" value="-1.0" />
             <Column property="SimMax" type="Double" value="1.0" />
             <MATLABType class="double" complex="false">
-              <size>13</size>
               <size>1</size>
+              <size>13</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 24, 22)" />
@@ -471,8 +321,8 @@
             <Column property="SimMin" type="Double" value="-6.9612812995910645" />
             <Column property="SimMax" type="Double" value="6.959089756011963" />
             <MATLABType class="single" complex="false">
-              <size>2</size>
               <size>1</size>
+              <size>2</size>
             </MATLABType>
             <Column property="IsInteger" type="Boolean" value="false" />
             <Column property="ProposedType" type="String" value="numerictype(1, 26, 22)" />
@@ -486,7 +336,7 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="x21" specid="-1">
+          <Variable name="score1" specid="-1">
             <Column property="Kind" type="String" value="local" />
             <Column property="SimMin" type="Double" value="0.001560619450174272" />
             <Column property="SimMax" type="Double" value="0.9999990463256836" />
@@ -506,7 +356,7 @@
             <Column property="SumFractionLength" type="Double" value="30" />
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
-          <Variable name="x22" specid="-1">
+          <Variable name="score2" specid="-1">
             <Column property="Kind" type="String" value="local" />
             <Column property="SimMin" type="Double" value="9.004492653730267E-7" />
             <Column property="SimMax" type="Double" value="0.998439371585846" />
@@ -527,7 +377,7 @@
             <Column property="CastBeforeSum" type="Boolean" value="true" />
           </Variable>
         </Function>
-        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f38_softmax">
+        <Function file="$(PROJECTDIR)/nnetInferenceHDL.m" name="softmax" specialization="softmax" specializationId="-1" uniqueId="f36_softmax">
           <Variable name="out1" specid="-1">
             <Column property="Kind" type="String" value="output" />
             <Column property="SimMin" type="Double" value="0.001560619450174272" />
@@ -686,8 +536,8 @@
     <var.lastVerifyContext>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;SimulationContext&gt;&lt;testFiles&gt;&lt;file&gt;/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/nnetInference_tb.m&lt;/file&gt;&lt;/testFiles&gt;&lt;syntheticCode&gt;&lt;/syntheticCode&gt;&lt;synthetic&gt;false&lt;/synthetic&gt;&lt;/SimulationContext&gt;</var.lastVerifyContext>
     <param.fpDataRoot>/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/codegen/nnetInferenceHDL/fixpt/guiFpReport.mat</param.fpDataRoot>
     <param.fpUserFileChecksum />
-    <var.snapshotChecksum>933293443</var.snapshotChecksum>
-    <param.fpLastConvertChecksum>2330908415</param.fpLastConvertChecksum>
+    <var.snapshotChecksum>1804735555</var.snapshotChecksum>
+    <param.fpLastConvertChecksum>890293344</param.fpLastConvertChecksum>
     <var.FixedPointAnalysisMode>option.FixedPointAnalysisMode.Sim</var.FixedPointAnalysisMode>
     <param.FixedPointUseDesignRanges>false</param.FixedPointUseDesignRanges>
     <param.hdl.Workflow>option.workflow.GenericAsicFpga</param.hdl.Workflow>
@@ -709,18 +559,18 @@
       <param.hdl.TargetInterface />
     </param.hdl.TargetInterface>
     <param.hdl.TargetLanguage>option.hdl.VHDL</param.hdl.TargetLanguage>
-    <param.hdl.CheckConformance>true</param.hdl.CheckConformance>
-    <param.hdl.LaunchConformanceReport>true</param.hdl.LaunchConformanceReport>
+    <param.hdl.CheckConformance>false</param.hdl.CheckConformance>
+    <param.hdl.LaunchConformanceReport>false</param.hdl.LaunchConformanceReport>
     <param.hdl.GenerateHDLCode>true</param.hdl.GenerateHDLCode>
     <param.hdl.GenerateEDAScripts>true</param.hdl.GenerateEDAScripts>
     <param.hdl.GenerateComments>true</param.hdl.GenerateComments>
-    <param.hdl.MATLABSourceComments>false</param.hdl.MATLABSourceComments>
-    <param.hdl.GenerateReport>false</param.hdl.GenerateReport>
+    <param.hdl.MATLABSourceComments>true</param.hdl.MATLABSourceComments>
+    <param.hdl.GenerateReport>true</param.hdl.GenerateReport>
     <param.hdl.VHDLFileExt>.vhd</param.hdl.VHDLFileExt>
     <param.hdl.VerilogFileExt>.v</param.hdl.VerilogFileExt>
     <param.hdl.SystemVerilogFileExt>.sv</param.hdl.SystemVerilogFileExt>
     <param.hdl.NoResetInitializationMode>option.hdl.NoResetNone</param.hdl.NoResetInitializationMode>
-    <param.hdl.DateComment>true</param.hdl.DateComment>
+    <param.hdl.DateComment>false</param.hdl.DateComment>
     <param.hdl.UserComment />
     <param.hdl.ModulePrefix />
     <param.hdl.PackagePostfix>_pkg</param.hdl.PackagePostfix>
@@ -779,27 +629,27 @@
     <param.hdl.ClockEnableOutputPort>ce_out</param.hdl.ClockEnableOutputPort>
     <param.hdl.ScalarizePorts>option.hdl.on</param.hdl.ScalarizePorts>
     <param.hdl.MapPersistentVarsToRAM>true</param.hdl.MapPersistentVarsToRAM>
-    <param.hdl.RAMThreshold>256</param.hdl.RAMThreshold>
+    <param.hdl.RAMThreshold>64</param.hdl.RAMThreshold>
     <param.hdl.MapPipelineDelaysToRAM>false</param.hdl.MapPipelineDelaysToRAM>
     <param.hdl.RAMVariableNames />
     <param.hdl.MultiplierPartitioningThreshold>65</param.hdl.MultiplierPartitioningThreshold>
     <param.hdl.AggressiveDataflowConversion>false</param.hdl.AggressiveDataflowConversion>
     <param.hdl.RegisterInputs>false</param.hdl.RegisterInputs>
-    <param.hdl.RegisterOutputs>false</param.hdl.RegisterOutputs>
-    <param.hdl.DistributedPipelining>false</param.hdl.DistributedPipelining>
+    <param.hdl.RegisterOutputs>true</param.hdl.RegisterOutputs>
+    <param.hdl.DistributedPipelining>true</param.hdl.DistributedPipelining>
     <param.hdl.DistributedPipeliningPriority>option.hdl.NumericalIntegrity</param.hdl.DistributedPipeliningPriority>
     <param.hdl.PreserveDesignDelays>false</param.hdl.PreserveDesignDelays>
     <param.hdl.InputPipeline>0</param.hdl.InputPipeline>
-    <param.hdl.OutputPipeline>0</param.hdl.OutputPipeline>
+    <param.hdl.OutputPipeline>10</param.hdl.OutputPipeline>
     <param.hdl.PipelineVariables />
-    <param.hdl.ResourceSharing>0</param.hdl.ResourceSharing>
+    <param.hdl.ResourceSharing>1</param.hdl.ResourceSharing>
     <param.hdl.MultiplierSharingMinimumBitwidth>0</param.hdl.MultiplierSharingMinimumBitwidth>
     <param.hdl.MultiplierPromotionThreshold>0</param.hdl.MultiplierPromotionThreshold>
     <param.hdl.AdderSharingMinimumBitwidth>0</param.hdl.AdderSharingMinimumBitwidth>
     <param.hdl.ShareMultipliers>true</param.hdl.ShareMultipliers>
     <param.hdl.ShareAdders>false</param.hdl.ShareAdders>
-    <param.hdl.ConstantMultiplierOptimization>option.hdl.NONE</param.hdl.ConstantMultiplierOptimization>
-    <param.hdl.LoopOptimization>option.hdl.LoopNone</param.hdl.LoopOptimization>
+    <param.hdl.ConstantMultiplierOptimization>option.hdl.AUTO</param.hdl.ConstantMultiplierOptimization>
+    <param.hdl.LoopOptimization>option.hdl.UnrollLoops</param.hdl.LoopOptimization>
     <param.hdl.InitializeBlockRAM>true</param.hdl.InitializeBlockRAM>
     <param.hdl.RAMArchitecture>option.hdl.EnabledRAM</param.hdl.RAMArchitecture>
     <param.hdl.PartitionFunctions>false</param.hdl.PartitionFunctions>
@@ -930,17 +780,15 @@
       <param.hdl.SynthesisToolSpeedValue />
       <param.hdl.TargetInterface />
       <param.hdl.TargetLanguage />
+      <param.hdl.CheckConformance />
       <param.hdl.LaunchConformanceReport />
       <param.hdl.GenerateHDLCode />
       <param.hdl.GenerateEDAScripts />
       <param.hdl.GenerateComments />
-      <param.hdl.MATLABSourceComments />
-      <param.hdl.GenerateReport />
       <param.hdl.VHDLFileExt />
       <param.hdl.VerilogFileExt />
       <param.hdl.SystemVerilogFileExt />
       <param.hdl.NoResetInitializationMode />
-      <param.hdl.DateComment />
       <param.hdl.UserComment />
       <param.hdl.ModulePrefix />
       <param.hdl.PackagePostfix />
@@ -994,27 +842,20 @@
       <param.hdl.OutputType />
       <param.hdl.ClockEnableOutputPort />
       <param.hdl.MapPersistentVarsToRAM />
-      <param.hdl.RAMThreshold />
       <param.hdl.MapPipelineDelaysToRAM />
       <param.hdl.RAMVariableNames />
       <param.hdl.MultiplierPartitioningThreshold />
       <param.hdl.AggressiveDataflowConversion />
       <param.hdl.RegisterInputs />
-      <param.hdl.RegisterOutputs />
-      <param.hdl.DistributedPipelining />
       <param.hdl.DistributedPipeliningPriority />
       <param.hdl.PreserveDesignDelays />
       <param.hdl.InputPipeline />
-      <param.hdl.OutputPipeline />
       <param.hdl.PipelineVariables />
-      <param.hdl.ResourceSharing />
       <param.hdl.MultiplierSharingMinimumBitwidth />
       <param.hdl.MultiplierPromotionThreshold />
       <param.hdl.AdderSharingMinimumBitwidth />
       <param.hdl.ShareMultipliers />
       <param.hdl.ShareAdders />
-      <param.hdl.ConstantMultiplierOptimization />
-      <param.hdl.LoopOptimization />
       <param.hdl.InitializeBlockRAM />
       <param.hdl.RAMArchitecture />
       <param.hdl.PartitionFunctions />
