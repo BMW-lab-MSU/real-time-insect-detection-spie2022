@@ -1,0 +1,3 @@
+run(FindPeaksTests)
+
+run(NnetTests)
