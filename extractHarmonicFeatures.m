@@ -1,4 +1,4 @@
-function features = extractHarmonicFeatures(psd, nHarmonics, opts)
+function features = extractHarmonicFeatures(psd, nHarmonics)
 % extractHarmonicFeatures extract features related to harmonics in the PSD.
 %
 %   features = extractHarmonicFeatures(psd, nHarmonics) extracts features from
@@ -19,11 +19,6 @@ function features = extractHarmonicFeatures(psd, nHarmonics, opts)
 % SPDX-License-Identifier: BSD-3-Clause
 
 % TODO: make nBins an input parameter
-arguments
-    psd (:,:) {mustBeNumeric}
-    nHarmonics (1,1) double
-    opts.UseParallel (1,1) logical = false
-end
 
 nBins = 2;
 nRows = height(psd);
@@ -44,15 +39,9 @@ harmonicHeightRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
 harmonicWidthRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
 harmonicProminenceRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
 
-fundamental = estimateFundamentalFreq(psd, 'UseParallel', opts.UseParallel);
+fundamental = estimateFundamentalFreq(psd);
 
-if opts.UseParallel
-    nWorkers = gcp('nocreate').NumWorkers;
-else
-    nWorkers = 0;
-end
-
-parfor (i = 1:nRows, nWorkers)
+for i = 1:nRows
     % Get features for all peaks
     [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findpeaks(psd(i,:));
     peakHeight{i} = single(peakHeight{i});

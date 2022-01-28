@@ -1,4 +1,4 @@
-function features = extractFreqDomainFeatures(X, opts)
+function features = extractFreqDomainFeatures(X)
 % extractFreqDomainFeatures extract frequency-domain features for insect
 % detection
 %
@@ -25,10 +25,6 @@ function features = extractFreqDomainFeatures(X, opts)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-arguments
-    X (:,:) {mustBeNumeric}
-    opts.UseParallel (1,1) logical = false
-end
 
 nHarmonics = 3;
 
@@ -41,7 +37,7 @@ psd = psd(:,1:end/2);
 psd = psd./psd(:,1);
 
 psdStats = extractPsdStats(psd);
-harmonicFeatures = extractHarmonicFeatures(psd, nHarmonics, 'UseParallel', opts.UseParallel);
+harmonicFeatures = extractHarmonicFeatures(psd, nHarmonics);
 
 features = [psdStats, harmonicFeatures];
 end

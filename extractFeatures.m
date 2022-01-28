@@ -1,4 +1,4 @@
-function features = extractFeatures(X, opts)
+function features = extractFeatures(X)
 % extractFeatures extract features for insect detection
 %
 %   features = extractFeatures(X) extracts features from the data matrix, X,
@@ -31,13 +31,8 @@ function features = extractFeatures(X, opts)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-arguments
-    X (:,:) {mustBeNumeric}
-    opts.UseParallel (1,1) logical = false
-end
-
 timeFeatures = extractTimeDomainFeatures(X);
-freqFeatures = extractFreqDomainFeatures(X, 'UseParallel', opts.UseParallel);
+freqFeatures = extractFreqDomainFeatures(X);
 
 features = [timeFeatures, freqFeatures];
 end
