@@ -2,7 +2,7 @@ function features = extractFreqDomainFeatures(X, opts)
 % extractFreqDomainFeatures extract frequency-domain features for insect
 % detection
 %
-%   features = extractFreqDomainFeatures(X) extracts features from the data %   %   matrix, X, and returns the features as a table. Observations are rows in X.
+%   features = extractFreqDomainFeatures(X) extracts features from the data   %   matrix, X, and returns the features as a table. Observations are rows in X.
 %
 %   The extracted PSD statistics are:
 %       'MeanPsd'                   - The mean of the PSD
