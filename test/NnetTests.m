@@ -90,5 +90,22 @@ classdef NnetTests < matlab.unittest.TestCase
 
             testCase.verifyLessThanOrEqual(abs(newScores - ogScores), 0.05);
         end
+        function testPredictedLabelsCodegen(testCase)
+            % Make sure the HDL-compatible version of the code predicts the
+            % same labels as the original model.
+            
+            % nnetInference() doesn't support nans
+            testCase.features(isnan(testCase.features)) = 0;
+
+            ogPredictions = predict(testCase.ogModel, testCase.features);
+            
+            newPredictions = false(size(ogPredictions));
+
+            for i = 1:height(testCase.features)
+                newPredictions(i) = nnetInferenceHDL(testCase.features(i,:));
+            end
+
+            testCase.verifyEqual(newPredictions, ogPredictions);
+        end
     end
 end
