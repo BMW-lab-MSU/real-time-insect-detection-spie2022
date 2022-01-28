@@ -19,5 +19,7 @@ for j = 1:nSpectra
     spectra(j, :, :) = spectrum(:, 1:j:(j * cols));
 end
 
-hps = squeeze(prod(spectra));
+hpsTmp = squeeze(prod(spectra));
+
+hps = reshape(hpsTmp, [rows, cols]);
 end
