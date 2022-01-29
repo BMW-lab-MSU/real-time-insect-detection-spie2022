@@ -1,5 +1,8 @@
-run(FindPeaksTests)
+suite = testsuite;
+runner = testrunner('textoutput');
 
-run(NnetTests)
+tic
+runInParallel(runner, suite)
+toc
 
-run(FeatureExtractionTests)
+delete(gcp('nocreate'));
