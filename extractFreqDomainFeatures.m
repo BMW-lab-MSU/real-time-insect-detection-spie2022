@@ -27,7 +27,7 @@ function features = extractFreqDomainFeatures(X)
 
 
 NUM_FREQ_FEATURES = 27;
-features = zeros(height(X), NUM_FREQ_FEATURES, 'like', X);
+features = zeros(size(X,1), NUM_FREQ_FEATURES, 'like', X);
 nHarmonics = 3;
 
 

@@ -21,10 +21,10 @@ function features = extractHarmonicFeatures(psd, nHarmonics)
 % TODO: make nBins an input parameter
 
 nBins = 2;
-nRows = height(psd);
+nRows = size(psd,1);
 
 harmonicCombinations = nchoosek(1:nHarmonics, 2);
-nHarmonicCombinations = height(harmonicCombinations);
+nHarmonicCombinations = size(harmonicCombinations, 1);
 
 peakHeight = cell(nRows, 1);
 peakLoc = cell(nRows, 1);
@@ -44,10 +44,6 @@ fundamental = estimateFundamentalFreq(psd);
 for i = 1:nRows
     % Get features for all peaks
     [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findPeaks(psd(i,:));
-    peakHeight{i} = single(peakHeight{i});
-    peakLoc{i} = single(peakLoc{i});
-    peakWidth{i} = single(peakWidth{i});
-    peakProminence{i} = single(peakProminence{i});
 end
 
 for i = 1:nRows
@@ -90,7 +86,7 @@ end
 
 % Assemble features into our output table
 % TODO: don't hardcode 21
-features = zeros(height(psd), 21);
+features = zeros(size(psd,1), 21);
 
 features(:,1) = harmonicHeight(:, 1);
 features(:,2) = harmonicLoc(:, 1);

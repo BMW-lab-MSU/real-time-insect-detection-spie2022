@@ -9,11 +9,11 @@ function fundamental = estimateFundamentalFreq(psd)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-fundamental = zeros(height(psd), 1, 'like', psd);
+fundamental = zeros(size(psd,1), 1, 'like', psd);
 
 hps = harmonicProductSpectrum(psd, 3);
 
-for i = 1:height(psd)
+for i = 1:numel(fundamental)
     [heights, locs, ~, ~] = findPeaks(hps(i,:));
     [~,maxPeakIdx] = max(heights);
     fundamental(i) = locs(maxPeakIdx);

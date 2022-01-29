@@ -33,7 +33,7 @@ function features = extractFeatures(X)
 
 NUM_FEATURES = 30;
 
-features = zeros(height(X), NUM_FEATURES, 'like', X);
+features = zeros(size(X,1), NUM_FEATURES, 'like', X);
 
 features(:,1:3) = extractTimeDomainFeatures(X);
 features(:,4:NUM_FEATURES) = extractFreqDomainFeatures(X);
