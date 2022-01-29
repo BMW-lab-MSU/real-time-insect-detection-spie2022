@@ -16,7 +16,7 @@ function [heights, locations, widths, prominences] = findPeaks(x)
 % Copyright (c) 2022 Trevor Vannoy
 % SPDX-License-Identifier: BSD-3-Clause
 
-[locations, leftEdges, rightEdges] = localMaxima1d(x);
+locations = localMaxima1d(x);
 
 heights = x(locations);
 
@@ -27,7 +27,7 @@ widths = peakWidths(x, locations, prominences, leftBases, rightBases);
 
 end
 
-function [midpoints, leftEdges, rightEdges] = localMaxima1d(x)
+function [midpoints] = localMaxima1d(x)
 % localMaxima1d Find local maxima in a 1D array
 %
 % Inputs:
@@ -40,45 +40,57 @@ function [midpoints, leftEdges, rightEdges] = localMaxima1d(x)
 
 % preallocate; there can't be more maxima than half the size of x
 midpoints = zeros(1, numel(x), 'uint32');
-leftEdges = zeros(1, numel(x), 'uint32');
-rightEdges = zeros(1, numel(x), 'uint32');
-nPeaksIdx = 1;
+% leftEdges = zeros(1, numel(x), 'uint32');
+% rightEdges = zeros(1, numel(x), 'uint32');
+% nPeaksIdx = 1;
 
-% the first sample can't be a maxima, so we start at 2
-i = 2;
+firstDiff = x(2:end) - x(1:end-1);
 
-% last sample can't be a maxima either
-iMax = numel(x);
+firstDiffNotZero = find(firstDiff ~= 0);
 
-while i < iMax
-    % test if previous sample is smaller
-    if x(i - 1) < x(i)
-        iAhead = i + 1;
+s = sign(firstDiff(firstDiffNotZero));
 
-        % find the next sample that is unequal to x[i]
-        while iAhead < iMax && x(iAhead) == x(i)
-            iAhead = iAhead + 1;
-        end
+diffSign = s(2:end) - s(1:end-1);
 
-        % maxima is found if next unequal sample is smaller than x[i]
-        if x(iAhead) < x(i)
-            leftEdges(nPeaksIdx) = i;
-            rightEdges(nPeaksIdx) = iAhead - 1;
-            midpoints(nPeaksIdx) = (leftEdges(nPeaksIdx) + rightEdges(nPeaksIdx)) / 2;
-            nPeaksIdx = nPeaksIdx + 1;
+inflectionPts = find(diffSign < 0);
 
-            % skip samples that can't be maxima
-            i = iAhead;
-        end
-    end
+midpoints = 1 + firstDiffNotZero(inflectionPts);
 
-    i = i + 1;
-end
+% % the first sample can't be a maxima, so we start at 2
+% i = 2;
 
-% resize based upon how many peaks were found
-midpoints = midpoints(1:nPeaksIdx-1);
-leftEdges = leftEdges(1:nPeaksIdx-1);
-rightEdges = rightEdges(1:nPeaksIdx-1);
+% % last sample can't be a maxima either
+% iMax = numel(x);
+
+% while i < iMax
+%     % test if previous sample is smaller
+%     if x(i - 1) < x(i)
+%         iAhead = i + 1;
+
+%         % find the next sample that is unequal to x[i]
+%         while iAhead < iMax && x(iAhead) == x(i)
+%             iAhead = iAhead + 1;
+%         end
+
+%         % maxima is found if next unequal sample is smaller than x[i]
+%         if x(iAhead) < x(i)
+%             leftEdges(nPeaksIdx) = i;
+%             rightEdges(nPeaksIdx) = iAhead - 1;
+%             midpoints(nPeaksIdx) = (leftEdges(nPeaksIdx) + rightEdges(nPeaksIdx)) / 2;
+%             nPeaksIdx = nPeaksIdx + 1;
+
+%             % skip samples that can't be maxima
+%             i = iAhead;
+%         end
+%     end
+
+%     i = i + 1;
+% end
+
+% % resize based upon how many peaks were found
+% midpoints = midpoints(1:nPeaksIdx-1);
+% leftEdges = leftEdges(1:nPeaksIdx-1);
+% rightEdges = rightEdges(1:nPeaksIdx-1);
 end
 
 function [prominences, leftBases, rightBases] = peakProminence(x, locations)
@@ -96,6 +108,7 @@ function [prominences, leftBases, rightBases] = peakProminence(x, locations)
 % preallocate
 prominences = zeros(size(locations), 'like', x);
 leftBases = zeros(size(locations), 'uint32');
+leftBases2 = zeros(size(locations), 'uint32');
 rightBases = zeros(size(locations), 'uint32');
 
 for peakNum = 1:numel(locations)
@@ -108,12 +121,17 @@ for peakNum = 1:numel(locations)
     i = location;
     leftMin = x(location);
 
-    while iMin <= i && x(i) <= x(location)
+    leftBorder = iMin;
+    for i = iMin:location-1
+        if x(i) >= x(location)
+            leftBorder = i;
+        end
+    end
+    for i = location:-1:leftBorder
         if x(i) < leftMin
             leftMin = x(i);
             leftBases(peakNum) = i;
         end
-        i = i - 1;
     end
 
     % Find the right base in interval [location, iMax]
@@ -121,12 +139,17 @@ for peakNum = 1:numel(locations)
     i = location;
     rightMin = x(location);
 
-    while i<= iMax && x(i) <= x(location)
+    rightBorder = iMax;
+    for i = iMax:-1:location+1
+        if x(i) >= x(location)
+            rightBorder = i;
+        end
+    end
+    for i = rightBorder:-1:location
         if x(i) < rightMin
             rightMin = x(i);
             rightBases(peakNum) = i;
         end
-        i = i + 1;
     end
 
     prominences(peakNum) = x(location) - max(leftMin, rightMin);
@@ -163,7 +186,7 @@ for peakNum = 1:numel(locations)
     while iMin < i && height < x(i)
         i = i - 1;
     end
-    leftIp = double(i);
+    leftIp = cast(i, 'like', x);
     if x(i) < height
         % Interpolate if true intersection height is between samples
         leftIp = leftIp + (height - x(i)) / (x(i + 1) - x(i));
@@ -174,7 +197,7 @@ for peakNum = 1:numel(locations)
     while i < iMax && height < x(i)
         i = i + 1;
     end
-    rightIp = double(i);
+    rightIp = cast(i, 'like', x);
     if x(i) < height
         % Interpolate if true intersection height is between samples
         rightIp = rightIp - (height - x(i)) / (x(i - 1) - x(i));
