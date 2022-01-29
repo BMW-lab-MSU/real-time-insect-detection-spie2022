@@ -26,11 +26,6 @@ nRows = size(psd,1);
 harmonicCombinations = nchoosek(1:nHarmonics, 2);
 nHarmonicCombinations = size(harmonicCombinations, 1);
 
-peakHeight = cell(nRows, 1);
-peakLoc = cell(nRows, 1);
-peakWidth = cell(nRows, 1);
-peakProminence = cell(nRows, 1);
-
 harmonicHeight = nan(nRows, nHarmonics, 'like', psd);
 harmonicLoc = nan(nRows, nHarmonics, 'like', psd);
 harmonicWidth = nan(nRows, nHarmonics, 'like', psd);
@@ -43,14 +38,12 @@ fundamental = estimateFundamentalFreq(psd);
 
 for i = 1:nRows
     % Get features for all peaks
-    [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findPeaks(psd(i,:));
-end
+    [peakHeight, peakLoc, peakWidth, peakProminence] = findPeaks(psd(i,:));
 
-for i = 1:nRows
     % Compute how close the each peaks' frequency bin is to being an integer
     % multiple of the fundamental frequency.
     % TODO: I think this could be done with rem()
-    freqBinDiffs = peakLoc{i}/fundamental(i) - fix(peakLoc{i}/fundamental(i));
+    freqBinDiffs = peakLoc/fundamental(i) - fix(peakLoc/fundamental(i));
 
     % Find the peak locations that are within nBins of an integer multiple of
     % the fundamental frequency.
@@ -59,15 +52,15 @@ for i = 1:nRows
     % Grab the peaks that are harmonics of the fundamental; if there are less
     % than nHarmonics, the missing harmonics are set as NaN.
     if numel(tmp) >= nHarmonics
-        harmonicLoc(i,:) = peakLoc{i}(tmp(1:nHarmonics));
-        harmonicWidth(i,:) = peakWidth{i}(tmp(1:nHarmonics));
-        harmonicProminence(i,:) = peakProminence{i}(tmp(1:nHarmonics));
-        harmonicHeight(i,:) = peakHeight{i}(tmp(1:nHarmonics));
+        harmonicLoc(i,:) = peakLoc(tmp(1:nHarmonics));
+        harmonicWidth(i,:) = peakWidth(tmp(1:nHarmonics));
+        harmonicProminence(i,:) = peakProminence(tmp(1:nHarmonics));
+        harmonicHeight(i,:) = peakHeight(tmp(1:nHarmonics));
     else
-        harmonicLoc(i,1:numel(tmp)) = peakLoc{i}(tmp);
-        harmonicWidth(i,1:numel(tmp)) = peakWidth{i}(tmp);
-        harmonicProminence(i,1:numel(tmp)) = peakProminence{i}(tmp);
-        harmonicHeight(i,1:numel(tmp)) = peakHeight{i}(tmp);
+        harmonicLoc(i,1:numel(tmp)) = peakLoc(tmp);
+        harmonicWidth(i,1:numel(tmp)) = peakWidth(tmp);
+        harmonicProminence(i,1:numel(tmp)) = peakProminence(tmp);
+        harmonicHeight(i,1:numel(tmp)) = peakHeight(tmp);
     end
     
     % Compute feature ratios for all n-choose-2 combinations of harmonics
