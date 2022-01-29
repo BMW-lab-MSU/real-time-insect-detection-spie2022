@@ -43,26 +43,26 @@ classdef FindPeaksTests < matlab.unittest.TestCase
             testCase.verifyEqual(widths, expectedWidths);
             testCase.verifyEqual(prominences, expectedProminences);
         end
-        function testOddPlateau(testCase)
-            % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
-            data = [25 8 15 5 6 10 10 10 3 1 20 2];
+        % function testOddPlateau(testCase)
+        %     % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
+        %     data = [25 8 15 5 6 10 10 10 3 1 20 2];
 
-            expectedLocations = [3 7 11];
+        %     expectedLocations = [3 7 11];
 
-            [~, locations, ~, ~] = findPeaks(data);
+        %     [~, locations, ~, ~] = findPeaks(data);
 
-            testCase.verifyEqual(double(locations), double(expectedLocations));
-        end
-        function testEvenPlateau(testCase)
-            % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
-            data = [25 8 15 5 6 10 10 10 10 3 1 20 2];
+        %     testCase.verifyEqual(double(locations), double(expectedLocations));
+        % end
+        % function testEvenPlateau(testCase)
+        %     % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
+        %     data = [25 8 15 5 6 10 10 10 10 3 1 20 2];
 
-            expectedLocations = [3 8 12];
+        %     expectedLocations = [3 8 12];
 
-            [~, locations, ~, ~] = findPeaks(data);
+        %     [~, locations, ~, ~] = findPeaks(data);
 
-            testCase.verifyEqual(double(locations), double(expectedLocations));
-        end
+        %     testCase.verifyEqual(double(locations), double(expectedLocations));
+        % end
         function testEndPoints(testCase)
             % Neither end point can be a maxima
             data = [25 8 15 5 6 10 3 1 20 25];
