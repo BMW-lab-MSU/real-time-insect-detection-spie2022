@@ -12,14 +12,12 @@ function hps = harmonicProductSpectrum(spectrum, nSpectra)
 rows = height(spectrum);
 cols = floor(width(spectrum) / nSpectra);
 spectra = zeros(nSpectra, rows, cols);
-hps = zeros(rows, cols);
+
+hps = spectrum(:,1:cols);
 
 % Downsample the spectrum
-for j = 1:nSpectra
-    spectra(j, :, :) = spectrum(:, 1:j:(j * cols));
+for j = 2:nSpectra
+    hps = hps .* spectrum(:, 1:j:(j * cols));
 end
 
-hpsTmp = squeeze(prod(spectra));
-
-hps = reshape(hpsTmp, [rows, cols]);
 end
