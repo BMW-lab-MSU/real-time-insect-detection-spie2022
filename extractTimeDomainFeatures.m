@@ -18,7 +18,11 @@ imageMean = mean(X(:));
 
 rowStd = std(X, 0, 2);
 
-maxDiff = max(abs(diff(X, 1, 2)), [], 2);
+firstDiff = X(:, 2:end) - X(:, 1:end-1);
+
+absFirstDiff = abs(firstDiff);
+
+maxDiff = max(absFirstDiff, [], 2);
 
 features = [rowMean - imageMean, rowStd, maxDiff];
 % features.RowMeanMinusImageMean = rowMean - imageMean;
