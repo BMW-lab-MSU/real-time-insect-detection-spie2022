@@ -43,7 +43,7 @@ fundamental = estimateFundamentalFreq(psd);
 
 for i = 1:nRows
     % Get features for all peaks
-    [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findpeaks(psd(i,:));
+    [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findPeaks(psd(i,:));
     peakHeight{i} = single(peakHeight{i});
     peakLoc{i} = single(peakLoc{i});
     peakWidth{i} = single(peakWidth{i});

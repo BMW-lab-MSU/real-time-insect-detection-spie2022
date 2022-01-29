@@ -14,8 +14,9 @@ fundamental = zeros(height(psd), 1, 'like', psd);
 hps = harmonicProductSpectrum(psd, 3);
 
 for i = 1:height(psd)
-    [~, fundamental(i)] = findpeaks(hps(i,:), 'NPeaks', 1, ...
-        'SortStr', 'descend');
+    [heights, locs, ~, ~] = findPeaks(hps(i,:));
+    [~,maxPeakIdx] = max(heights);
+    fundamental(i) = locs(maxPeakIdx);
 end
 
 end
