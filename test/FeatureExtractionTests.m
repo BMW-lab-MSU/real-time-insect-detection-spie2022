@@ -31,11 +31,11 @@ classdef FeatureExtractionTests < matlab.unittest.TestCase
             p = path;
             addpath('../original-code')
 
-            ogFeatures = extractFeatures(testCase.data(1:1000,:));
+            ogFeatures = extractFeatures(testCase.data(1:5000,:));
 
             path(p);
 
-            newFeatures = extractFeatures(testCase.data(1:1000,:));
+            newFeatures = extractFeatures(testCase.data(1:5000,:));
 
             testCase.verifyEqual(newFeatures, table2array(ogFeatures),...
                 "RelTol", cast(1e-2, 'like', newFeatures));
@@ -44,7 +44,7 @@ classdef FeatureExtractionTests < matlab.unittest.TestCase
             % Make sure my codegen-ready version does the same thing
             % as the original code
 
-            esd = abs(fft(testCase.data(1:1000,:)).^2);
+            esd = abs(fft(testCase.data(1:5000,:)).^2);
             esd = esd(:,1:end/2);
             esd = esd./esd(:,1);
 
