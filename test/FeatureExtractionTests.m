@@ -37,7 +37,7 @@ classdef FeatureExtractionTests < matlab.unittest.TestCase
 
             newFeatures = extractFeatures(testCase.data(1:1000,:));
 
-            testCase.verifyEqual(newFeatures, ogFeatures);
+            testCase.verifyEqual(newFeatures, table2array(ogFeatures));
         end
     end
 end

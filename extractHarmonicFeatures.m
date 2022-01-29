@@ -89,19 +89,41 @@ for i = 1:nRows
 end
 
 % Assemble features into our output table
-features = table;
+% TODO: don't hardcode 21
+features = zeros(height(psd), 21);
 
-for n = 1:nHarmonics
-    features.(['HarmonicHeight' num2str(n)]) = harmonicHeight(:, n);
-    features.(['HarmonicLoc' num2str(n)]) = harmonicLoc(:, n);
-    features.(['HarmonicWidth' num2str(n)]) = harmonicWidth(:, n);
-    features.(['HarmonicProminence' num2str(n)]) = harmonicProminence(:, n);
-end
+features(:,1) = harmonicHeight(:, 1);
+features(:,2) = harmonicLoc(:, 1);
+features(:,3) = harmonicWidth(:, 1);
+features(:,4) = harmonicProminence(:, 1);
+features(:,5) = harmonicHeight(:, 2);
+features(:,6) = harmonicLoc(:, 2);
+features(:,7) = harmonicWidth(:, 2);
+features(:,8) = harmonicProminence(:, 2);
+features(:,9) = harmonicHeight(:, 3);
+features(:,10) = harmonicLoc(:, 3);
+features(:,11) = harmonicWidth(:, 3);
+features(:,12) = harmonicProminence(:, 3);
+features(:,13) = harmonicHeightRatio(:, 1);
+features(:,14) = harmonicWidthRatio(:, 1);
+features(:,15) = harmonicProminenceRatio(:, 1);
+features(:,16) = harmonicHeightRatio(:, 2);
+features(:,17) = harmonicWidthRatio(:, 2);
+features(:,18) = harmonicProminenceRatio(:, 2);
+features(:,19) = harmonicHeightRatio(:, 3);
+features(:,20) = harmonicWidthRatio(:, 3);
+features(:,21) = harmonicProminenceRatio(:, 3);
 
-for n = 1:nHarmonicCombinations
-    ratioStr = strrep(num2str(harmonicCombinations(n,:)), ' ', '');
-    features.(['HarmonicHeightRatio' ratioStr]) = harmonicHeightRatio(:, n);
-    features.(['HarmonicWidthRatio' ratioStr]) = harmonicWidthRatio(:, n);
-    features.(['HarmonicProminenceRatio' ratioStr]) = harmonicProminenceRatio(:, n);
-end
+% for n = 1:nHarmonics
+%     features(:,1 + 4*(n-1)) = harmonicHeight(:, n);
+%     features(:,2 + 4*(n-1)) = harmonicLoc(:, n);
+%     features(:,3 + 4*(n-1)) = harmonicWidth(:, n);
+%     features(:,4 + 4*(n-1)) = harmonicProminence(:, n);
+% end
+
+% for n = 1:nHarmonicCombinations
+%     features(:,13 + 4*(n-1)) = harmonicHeightRatio(:, n);
+%     features(:,14 + 4*(n-1)) = harmonicWidthRatio(:, n);
+%     features(:,15 + 4*(n-1)) = harmonicProminenceRatio(:, n);
+% end
 end

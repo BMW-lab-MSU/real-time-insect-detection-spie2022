@@ -31,8 +31,11 @@ function features = extractFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-timeFeatures = extractTimeDomainFeatures(X);
-freqFeatures = extractFreqDomainFeatures(X);
+NUM_FEATURES = 30;
 
-features = [timeFeatures, freqFeatures];
+features = zeros(height(X), NUM_FEATURES, 'like', X);
+
+features(:,1:3) = extractTimeDomainFeatures(X);
+features(:,4:NUM_FEATURES) = extractFreqDomainFeatures(X);
+
 end

@@ -26,7 +26,10 @@ function features = extractFreqDomainFeatures(X)
 % SPDX-License-Identifier: BSD-3-Clause
 
 
+NUM_FREQ_FEATURES = 27;
+features = zeros(height(X), NUM_FREQ_FEATURES, 'like', X);
 nHarmonics = 3;
+
 
 psd = abs(fft(X, [], 2).^2);
 
@@ -36,8 +39,7 @@ psd = psd(:,1:end/2);
 % Normalize by the DC component
 psd = psd./psd(:,1);
 
-psdStats = extractPsdStats(psd);
-harmonicFeatures = extractHarmonicFeatures(psd, nHarmonics);
+features(:,1:6) = extractPsdStats(psd);
+features(:,7:NUM_FREQ_FEATURES) = extractHarmonicFeatures(psd, nHarmonics);
 
-features = [psdStats, harmonicFeatures];
 end
