@@ -30,16 +30,22 @@ NUM_FREQ_FEATURES = 27;
 features = zeros(size(X,1), NUM_FREQ_FEATURES, 'like', X);
 nHarmonics = 3;
 
+esd = zeros(size(X));
+oneSidedEsd = zeros(size(X,1), size(X,2)/2);
 
-psd = abs(fft(X, [], 2).^2);
+ft = dsp.FFT('FFTLengthSource', 'Property', 'FFTLength', size(X,2));
+
+% dsp.FFT works on columns, so I have to transpose so the observations
+% are in columns and then transpose back so they are in rows again.
+esd = (abs(ft(X')).^2)';
 
 % Only look at the positive frequencies
-psd = psd(:,1:end/2);
+oneSidedEsd = esd(:,1:end/2);
 
 % Normalize by the DC component
-psd = psd./psd(:,1);
+oneSidedEsd = oneSidedEsd./oneSidedEsd(:,1);
 
-features(:,1:6) = extractPsdStats(psd);
-features(:,7:NUM_FREQ_FEATURES) = extractHarmonicFeatures(psd, nHarmonics);
+features(:,1:6) = extractPsdStats(oneSidedEsd);
+features(:,7:NUM_FREQ_FEATURES) = extractHarmonicFeatures(oneSidedEsd, nHarmonics);
 
 end
