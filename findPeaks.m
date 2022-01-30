@@ -182,25 +182,35 @@ for peakNum = 1:numel(locations)
     height = x(location) - prominences(peakNum) * relHeight;
 
     % Find intersection point on left side
-    i = location;
-    while iMin < i && height < x(i)
-        i = i - 1;
+    done = false;
+    for i = location:-1:iMin
+        if ~done
+            if x(i) <= height
+                done = true;
+                leftIp = cast(i, 'like', x);
+            end
+        end
     end
-    leftIp = cast(i, 'like', x);
-    if x(i) < height
+    
+    if x(leftIp) < height
         % Interpolate if true intersection height is between samples
-        leftIp = leftIp + (height - x(i)) / (x(i + 1) - x(i));
+        leftIp = leftIp + (height - x(leftIp)) / (x(leftIp + 1) - x(leftIp));
     end
 
     % Find intersection point on right side
-    i = location;
-    while i < iMax && height < x(i)
-        i = i + 1;
+    done = false;
+    for i = location:iMax
+        if ~done
+            if x(i) <= height
+                done = true;
+                rightIp = cast(i, 'like', x);
+            end
+        end
     end
-    rightIp = cast(i, 'like', x);
-    if x(i) < height
+
+    if x(rightIp) < height
         % Interpolate if true intersection height is between samples
-        rightIp = rightIp - (height - x(i)) / (x(i - 1) - x(i));
+        rightIp = rightIp - (height - x(rightIp)) / (x(rightIp - 1) - x(rightIp));
     end
 
     widths(peakNum) = rightIp - leftIp;
