@@ -16,7 +16,7 @@ function features = extractTimeDomainFeatures(X)
 rowMean = mean(X, 2);
 imageMean = mean(X(:));
 
-rowStd = std(X, 0, 2);
+rowStd = stddev(X, rowMean);
 
 firstDiff = X(:, 2:end) - X(:, 1:end-1);
 
