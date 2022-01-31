@@ -31,13 +31,18 @@ classdef FeatureExtractionTests < matlab.unittest.TestCase
             p = path;
             addpath('../original-code')
 
-            ogFeatures = extractFeatures(testCase.data(1:5000,:));
+            ogFeaturesTbl = extractFeatures(testCase.data(1:5000,:));
+
+            % replace nans with 0 because the HDL version won't be
+            % able to use nans
+            ogFeatures = table2array(ogFeaturesTbl);
+            ogFeatures(isnan(ogFeatures)) = 0;
 
             path(p);
 
             newFeatures = extractFeatures(testCase.data(1:5000,:));
 
-            testCase.verifyEqual(newFeatures, table2array(ogFeatures),...
+            testCase.verifyEqual(newFeatures, ogFeatures,...
                 "RelTol", cast(1e-2, 'like', newFeatures));
         end
         function testFundamentalExtractionAgainstOriginal(testCase)

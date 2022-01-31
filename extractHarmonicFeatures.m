@@ -26,13 +26,13 @@ nRows = size(psd,1);
 harmonicCombinations = nchoosek(1:nHarmonics, 2);
 nHarmonicCombinations = size(harmonicCombinations, 1);
 
-harmonicHeight = nan(nRows, nHarmonics, 'like', psd);
-harmonicLoc = nan(nRows, nHarmonics, 'like', psd);
-harmonicWidth = nan(nRows, nHarmonics, 'like', psd);
-harmonicProminence = nan(nRows, nHarmonics, 'like', psd);
-harmonicHeightRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
-harmonicWidthRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
-harmonicProminenceRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
+harmonicHeight = zeros(nRows, nHarmonics, 'like', psd);
+harmonicLoc = zeros(nRows, nHarmonics, 'like', psd);
+harmonicWidth = zeros(nRows, nHarmonics, 'like', psd);
+harmonicProminence = zeros(nRows, nHarmonics, 'like', psd);
+harmonicHeightRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
+harmonicWidthRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
+harmonicProminenceRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
 
 fundamental = estimateFundamentalFreq(psd);
 
