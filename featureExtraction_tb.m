@@ -5,9 +5,14 @@
 DATADIR = "../../data/insect-lidar/testing";
 load(DATADIR + filesep + "testingData", "testingData")
 
+nDataPoints = 50e3;
+
 data = nestedcell2mat(testingData);
-data = data(1:1000,:);
-features = zeros(1000,30);
+
+dataIdx = randperm(size(data,1), nDataPoints);
+
+data = data(dataIdx,:);
+features = zeros(nDataPoints,30);
 
 for i = 1:height(data)
     features(i,:) = extractFeatures(data(i,:));
