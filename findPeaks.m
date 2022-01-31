@@ -182,6 +182,7 @@ for peakNum = 1:numel(locations)
     height = x(location) - prominences(peakNum) * relHeight;
 
     % Find intersection point on left side
+    leftIp = cast(iMin, 'like', x);
     done = false;
     for i = location:-1:iMin
         if ~done
@@ -198,6 +199,7 @@ for peakNum = 1:numel(locations)
     end
 
     % Find intersection point on right side
+    rightIp = cast(iMax, 'like', x);
     done = false;
     for i = location:iMax
         if ~done
