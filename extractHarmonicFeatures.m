@@ -69,11 +69,23 @@ for i = 1:nRows
         harmonic1 = harmonicCombinations(n, 1);
         harmonic2 = harmonicCombinations(n, 2);
 
-        harmonicHeightRatio(i, n) = harmonicHeight(i, harmonic1) / harmonicHeight(1, harmonic2);
+        if harmonicHeight(i, harmonic2) ~= 0
+            harmonicHeightRatio(i, n) = harmonicHeight(i, harmonic1) / harmonicHeight(i, harmonic2);
+        else
+            harmonicHeightRatio(i, n) = 0;
+        end
 
-        harmonicWidthRatio(i, n) = harmonicWidth(i ,harmonic1) / harmonicWidth(1, harmonic2);
+        if harmonicWidth(i, harmonic2) ~= 0
+            harmonicWidthRatio(i, n) = harmonicWidth(i ,harmonic1) / harmonicWidth(i, harmonic2);
+        else
+            harmonicWidthRatio(i, n) = 0;
+        end
 
-        harmonicProminenceRatio(i, n) = harmonicProminence(i ,harmonic1) / harmonicProminence(1, harmonic2);
+        if harmonicProminence(i, harmonic2) ~= 0
+            harmonicProminenceRatio(i, n) = harmonicProminence(i ,harmonic1) / harmonicProminence(i, harmonic2);
+        else
+            harmonicProminenceRatio(i, n) = 0;
+        end
     end
 end
 
