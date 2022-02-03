@@ -23,7 +23,9 @@ function features = extractHarmonicFeatures(psd, nHarmonics)
 nBins = 2;
 nRows = size(psd,1);
 
-harmonicCombinations = nchoosek(1:nHarmonics, 2);
+
+harmonicCombinations = [1 2; 1 3; 2 3];
+% harmonicCombinations = nchoosek(1:nHarmonics, 2);
 nHarmonicCombinations = size(harmonicCombinations, 1);
 
 harmonicHeight = zeros(nRows, nHarmonics, 'like', psd);
@@ -51,7 +53,7 @@ for i = 1:nRows
     
     % Grab the peaks that are harmonics of the fundamental; if there are less
     % than nHarmonics, the missing harmonics are set as NaN.
-    if numel(tmp) >= nHarmonics
+    if numel(tmp) >= 3
         harmonicLoc(i,:) = peakLoc(tmp(1:nHarmonics));
         harmonicWidth(i,:) = peakWidth(tmp(1:nHarmonics));
         harmonicProminence(i,:) = peakProminence(tmp(1:nHarmonics));
