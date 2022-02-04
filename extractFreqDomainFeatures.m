@@ -37,7 +37,8 @@ ft = dsp.FFT('FFTLengthSource', 'Property', 'FFTLength', size(X,2));
 
 % dsp.FFT works on columns, so I have to transpose so the observations
 % are in columns and then transpose back so they are in rows again.
-esd = (abs(ft(X')).^2)';
+spectrum = ft(X')';
+esd = real(spectrum).^2 + imag(spectrum).^2;
 
 % Only look at the positive frequencies
 oneSidedEsd = esd(:,1:end/2);
