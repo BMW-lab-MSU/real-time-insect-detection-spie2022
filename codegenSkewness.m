@@ -12,6 +12,6 @@ secondMoment = mean(xCentered.^2, 2);
 
 thirdMoment = mean(xCentered.^3, 2);
 
-denominator = (secondMoment).^(1.5);
+denominator = sqrt(secondMoment.^3);
 
 s = thirdMoment ./ denominator;

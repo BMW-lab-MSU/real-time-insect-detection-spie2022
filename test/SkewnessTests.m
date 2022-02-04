@@ -21,8 +21,8 @@ classdef SkewnessTests < matlab.unittest.TestCase
             % 2*eps (twice the precision of doubles) of the expected
             % answers. Being off by a few times the machine precision
             % is no big deal.
-            testCase.verifyEqual(result, expected) %, ...
-                % "RelTol", 3*eps(class(result)));
+            testCase.verifyEqual(result, expected, ...
+                "RelTol", 3*eps(class(result)));
         end
     end
 end
