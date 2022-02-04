@@ -33,11 +33,9 @@ nHarmonics = 3;
 esd = zeros(size(X));
 oneSidedEsd = zeros(size(X,1), size(X,2)/2);
 
-ft = dsp.FFT('FFTLengthSource', 'Property', 'FFTLength', size(X,2));
-
-% dsp.FFT works on columns, so I have to transpose so the observations
+% dsp.HDLFFT works on columns, so I have to transpose so the observations
 % are in columns and then transpose back so they are in rows again.
-spectrum = ft(X')';
+spectrum = hdlfft(X')';
 esd = real(spectrum).^2 + imag(spectrum).^2;
 
 % Only look at the positive frequencies
