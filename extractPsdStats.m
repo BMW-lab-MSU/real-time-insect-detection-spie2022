@@ -19,10 +19,10 @@ function features = extractPsdStats(psd)
 avgPsd = mean(psd, 2);
 stdPsd = stddev(psd, avgPsd);
 medianPsd = median(psd, 2);
-madPsd = mad(psd, 1, 2);
-skewnessPsd = skewness(psd, 1, 2);
+madPsd = medianAbsDeviation(psd);
+skewnessPsd = codegenSkewness(psd);
 skewnessPsd = skewnessPsd - mean(skewnessPsd);
-kurtosisPsd = kurtosis(psd, 1, 2);
+kurtosisPsd = codegenKurtosis(psd);
 kurtosisPsd = kurtosisPsd - mean(kurtosisPsd);
 
 
