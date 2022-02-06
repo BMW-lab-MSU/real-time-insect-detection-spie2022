@@ -11,8 +11,8 @@ function hps = harmonicProductSpectrum(spectrum, nSpectra)
 
 rows = height(spectrum);
 cols = floor(width(spectrum) / nSpectra);
-spectra = zeros(nSpectra, rows, cols);
-hps = zeros(rows, cols);
+spectra = zeros(nSpectra, rows, cols, 'like', spectrum);
+hps = zeros(rows, cols, 'like', spectrum);
 
 % Downsample the spectrum
 for j = 1:nSpectra
