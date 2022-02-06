@@ -93,7 +93,7 @@ end
 
 % Assemble features into our output table
 % TODO: don't hardcode 21
-features = zeros(size(psd,1), 21);
+features = zeros(size(psd,1), 21, 'like', psd);
 
 features(:,1) = harmonicHeight(:, 1);
 features(:,2) = harmonicLoc(:, 1);

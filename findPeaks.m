@@ -39,20 +39,20 @@ function [midpoints] = localMaxima1d(x)
 %   - rightEdges: indices for the right edges of each maxima
 
 % preallocate; there can't be more maxima than half the size of x
-midpoints = zeros(1, numel(x), 'uint32');
+midpoints = zeros(1, numel(x), 'like', x);
 % leftEdges = zeros(1, numel(x), 'uint32');
 % rightEdges = zeros(1, numel(x), 'uint32');
 % nPeaksIdx = 1;
 
 firstDiff = x(2:end) - x(1:end-1);
 
-firstDiffNotZero = find(firstDiff ~= 0);
+firstDiffNotZero = cast(find(firstDiff ~= 0), 'like', x);
 
-s = sign(firstDiff(firstDiffNotZero));
+s = cast(sign(firstDiff(firstDiffNotZero)), 'like', x);
 
 diffSign = s(2:end) - s(1:end-1);
 
-inflectionPts = find(diffSign < 0);
+inflectionPts = cast(find(diffSign < 0), 'like', x);
 
 midpoints = 1 + firstDiffNotZero(inflectionPts);
 
@@ -107,9 +107,9 @@ function [prominences, leftBases, rightBases] = peakProminence(x, locations)
 
 % preallocate
 prominences = zeros(size(locations), 'like', x);
-leftBases = zeros(size(locations), 'uint32');
-leftBases2 = zeros(size(locations), 'uint32');
-rightBases = zeros(size(locations), 'uint32');
+leftBases = zeros(size(locations), 'like', x);
+leftBases2 = zeros(size(locations), 'like', x);
+rightBases = zeros(size(locations), 'like', x);
 
 for peakNum = 1:numel(locations)
     location = locations(peakNum);

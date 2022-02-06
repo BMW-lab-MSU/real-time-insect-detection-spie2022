@@ -32,7 +32,7 @@ xComplex = complex(x);
 % the HDLFFT system object
 xVect = reshape(xComplex, VECTOR_LEN, FFT_LENGTH/VECTOR_LEN);
 
-yVect = complex(zeros(VECTOR_LEN, loopCount));
+yVect = complex(zeros(VECTOR_LEN, loopCount, 'like', x));
 validOut = false(VECTOR_LEN, loopCount);
 
 for loop = 1:loopCount
