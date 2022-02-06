@@ -23,24 +23,30 @@ classdef HdlFFTTests < matlab.unittest.TestCase
             expected = fft(data);
             result = hdlfft(data);
 
-            testCase.verifyEqual(result, expected, "RelTol", single(1e-5));
+            testCase.verifyEqual(result, expected, "AbsTol", single(1e-5));
         end
         function testOnLidarData(testCase)
+            import matlab.unittest.constraints.IsEqualTo
+            import matlab.unittest.constraints.AbsoluteTolerance
+            import matlab.unittest.constraints.RelativeTolerance
+
             load(HdlFFTTests.testingDataDir + filesep + "testingData")
             data = nestedcell2mat(testingData);
 
-            nDataPoints = 5e3;
+            nDataPoints = 150e3;
             dataIdx = randperm(size(data,1), nDataPoints);
             data = data(dataIdx,:);
 
             expected = fft(data, [], 2);
 
             result = complex(zeros(size(expected), 'like', expected));
-            for i = 1:nDataPoints
+            parfor i = 1:nDataPoints
                 result(i,:) = hdlfft(data(i,:).').';
             end
 
-            testCase.verifyEqual(result, expected, "RelTol", single(1e-3));
+            testCase.verifyThat(result, IsEqualTo(expected, 'Within',...
+                RelativeTolerance(single(1e-6)) | AbsoluteTolerance(single(1e-5))));
+            %testCase.verifyEqual(result, expected, "AbsTol", single(1e-5));
         end
     end
 end
