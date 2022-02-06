@@ -14,15 +14,20 @@ FFT_LENGTH = 1024;
 % when using the streaming architecture.
 VECTOR_LEN = 64;
 
+% FFT_LENGTH/VECTOR_LEN
+N_CHUNKS = 16; 
+
 % System objects need to be persistent for HDL code generation
 persistent ft;
 if isempty(ft)
-    ft = dsp.HDLFFT('FFTLength', FFT_LENGTH, 'BitReversedOutput', false);
+    ft = dsp.HDLFFT('FFTLength', 1024, 'BitReversedOutput', false);
 end
-
-% Number of iterations needed to get the all the data through
-% the fft while accounting for the latency of the fft.
-loopCount = getLatency(ft, FFT_LENGTH, VECTOR_LEN) + FFT_LENGTH/VECTOR_LEN;
+persistent loopCount
+if isempty(loopCount)
+    % Number of iterations needed to get the all the data through
+    % the fft while accounting for the latency of the fft.
+    loopCount = getLatency(ft, 1024, 64) + 16;
+end
 
 % HDLFFT outputs the same data type as the input, so we need to
 % convert the input to complex numbers to get complex output.
@@ -30,24 +35,26 @@ xComplex = complex(x);
 
 % Split the input into vectors of length 64 for processing in
 % the HDLFFT system object
-xVect = reshape(xComplex, VECTOR_LEN, FFT_LENGTH/VECTOR_LEN);
+xVect = reshape(xComplex, VECTOR_LEN, N_CHUNKS);
 
 yVect = complex(zeros(VECTOR_LEN, loopCount, 'like', x));
 validOut = false(VECTOR_LEN, loopCount);
 
+i = cast(0, 'uint8');
+
 for loop = 1:loopCount
     % Select which 64-length portion of the signal to feed into the fft
-    if mod(loop, FFT_LENGTH/VECTOR_LEN) == 0
-        i = FFT_LENGTH/VECTOR_LEN;
+    if mod(loop, N_CHUNKS) == 0
+        i(:) = N_CHUNKS;
     else
-        i = mod(loop,FFT_LENGTH/VECTOR_LEN);
+        i(:) = mod(loop, N_CHUNKS);
     end
 
     % Input data is only valid until we reach the last 64-length
     % portion of the input signal. After that, the input data is 
     % invalid, but we need the extra computation cycles to get
     % the output data out of the fft due to the latency.
-    validIn = loop <= FFT_LENGTH/VECTOR_LEN;
+    validIn = loop <= N_CHUNKS;
     [yVect(:,loop), validOut(loop)] = ft(xVect(:,i), validIn);
 end
 
