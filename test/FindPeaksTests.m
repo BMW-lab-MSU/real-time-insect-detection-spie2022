@@ -17,6 +17,11 @@ classdef FindPeaksTests < matlab.unittest.TestCase
 
             [heights, locations, ~, ~] = findPeaks(data);
 
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            heights = heights(heights ~= 0);
+            locations = locations(locations ~= 0);
+
             testCase.verifyEqual(heights, expectedHeights);
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end
@@ -38,6 +43,13 @@ classdef FindPeaksTests < matlab.unittest.TestCase
 
             [heights, locations, widths, prominences] = findPeaks(PeakSig);
 
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            heights = heights(heights ~= 0);
+            locations = locations(locations ~= 0);
+            widths = widths(widths ~= 0);
+            prominences = prominences(prominences ~= 0);
+
             testCase.verifyEqual(heights, expectedHeights);
             testCase.verifyEqual(double(locations), double(expectedLocations));
             testCase.verifyEqual(widths, expectedWidths);
@@ -51,6 +63,10 @@ classdef FindPeaksTests < matlab.unittest.TestCase
 
             [~, locations, ~, ~] = findPeaks(data);
 
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            locations = locations(locations ~= 0);
+
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end
         function testEndPoints(testCase)
@@ -60,6 +76,10 @@ classdef FindPeaksTests < matlab.unittest.TestCase
             expectedLocations = [3 6];
 
             [~, locations, ~, ~] = findPeaks(data);
+
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            locations = locations(locations ~= 0);
 
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end
