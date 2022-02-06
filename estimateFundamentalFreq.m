@@ -9,6 +9,8 @@ function fundamental = estimateFundamentalFreq(psd)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 fundamental = zeros(size(psd,1), 1, 'like', psd);
 
 hps = harmonicProductSpectrum(psd, 3);

@@ -15,6 +15,8 @@ function [heights, locations, widths, prominences] = findPeaks(x)
 % Copyright (c) 2022 Trevor Vannoy
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 locations = localMaxima1d(x);
 
 heights = zeros(size(locations), 'like', x);

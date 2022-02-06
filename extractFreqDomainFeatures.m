@@ -25,6 +25,8 @@ function features = extractFreqDomainFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 
 NUM_FREQ_FEATURES = 27;
 features = zeros(size(X,1), NUM_FREQ_FEATURES, 'like', X);

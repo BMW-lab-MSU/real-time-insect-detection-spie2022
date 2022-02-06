@@ -20,6 +20,8 @@ function features = extractHarmonicFeatures(psd, nHarmonics)
 
 % TODO: make nBins an input parameter
 
+%#codegen
+
 nBins = 2;
 nRows = size(psd,1);
 

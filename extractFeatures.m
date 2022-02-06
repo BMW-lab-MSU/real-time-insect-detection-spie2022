@@ -31,6 +31,8 @@ function features = extractFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 NUM_FEATURES = 30;
 
 features = zeros(size(X,1), NUM_FEATURES, 'like', X);

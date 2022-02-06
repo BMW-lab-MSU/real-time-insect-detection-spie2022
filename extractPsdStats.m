@@ -16,6 +16,8 @@ function features = extractPsdStats(psd)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 avgPsd = mean(psd, 2);
 stdPsd = stddev(psd, avgPsd);
 medianPsd = median(psd, 2);

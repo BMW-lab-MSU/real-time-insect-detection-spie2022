@@ -9,6 +9,8 @@ function hps = harmonicProductSpectrum(spectrum, nSpectra)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 rows = size(spectrum,1);
 cols = floor(size(spectrum,2) / nSpectra);
 

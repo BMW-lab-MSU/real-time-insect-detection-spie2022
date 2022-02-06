@@ -8,6 +8,8 @@ function y = hdlfft(x)
 % The FFT use a streaming low-latency architecture and processes
 % chunks of 64 words at a time.
 
+%#codegen
+
 FFT_LENGTH = 1024;
 
 % HDLFFT can only accept vectors of up to length 64 at one time

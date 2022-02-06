@@ -1,5 +1,7 @@
 function s = stddev(x, avg)
 
+%#codegen
+
 normalization = size(x,2) - 1;
 
 partial1 = abs(x - avg).^2;

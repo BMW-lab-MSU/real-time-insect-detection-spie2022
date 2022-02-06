@@ -5,6 +5,8 @@ function k = codegenKurtosis(x)
 % possibly due to 'dimension' argument. By hardcoding the dimension,
 % this version is fixed-point compatible.
 
+%#codegen
+
 xCentered = x - mean(x,2);
 
 secondMoment = mean(xCentered.^2, 2);

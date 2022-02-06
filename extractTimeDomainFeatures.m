@@ -13,6 +13,8 @@ function features = extractTimeDomainFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
+%#codegen
+
 rowMean = mean(X, 2);
 imageMean = mean(X(:));
 

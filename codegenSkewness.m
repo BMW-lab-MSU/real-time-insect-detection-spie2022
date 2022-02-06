@@ -5,6 +5,8 @@ function s = codegenSkewness(x)
 % possibly due to 'dimension' argument. By hardcoding the dimension,
 % this version is fixed-point compatible.
 
+%#codegen
+
 
 xCentered = x - mean(x,2);
 
