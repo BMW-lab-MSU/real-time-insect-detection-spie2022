@@ -1,5 +1,10 @@
 classdef HdlFFTTests < matlab.unittest.TestCase
 
+    properties (Constant)
+       baseDir = "../../../data/insect-lidar";
+       testingDataDir = FeatureExtractionTests.baseDir + filesep + "testing";
+    end
+
     methods (TestClassSetup)
         function addToPath(testCase)
             p = path;
@@ -14,11 +19,28 @@ classdef HdlFFTTests < matlab.unittest.TestCase
             % as the original fft
 
             FFT_LENGTH =1024;
-            data = rand(FFT_LENGTH, 1);
+            data = rand(FFT_LENGTH, 1, 'single');
             expected = fft(data);
             result = hdlfft(data);
 
-            testCase.verifyEqual(result, expected, "RelTol", 1e-6);
+            testCase.verifyEqual(result, expected, "RelTol", single(1e-5));
+        end
+        function testOnLidarData(testCase)
+            load(HdlFFTTests.testingDataDir + filesep + "testingData")
+            data = nestedcell2mat(testingData);
+
+            nDataPoints = 5e3;
+            dataIdx = randperm(size(data,1), nDataPoints);
+            data = data(dataIdx,:);
+
+            expected = fft(data, [], 2);
+
+            result = complex(zeros(size(expected), 'like', expected));
+            for i = 1:nDataPoints
+                result(i,:) = hdlfft(data(i,:).').';
+            end
+
+            testCase.verifyEqual(result, expected, "RelTol", single(1e-3));
         end
     end
 end
