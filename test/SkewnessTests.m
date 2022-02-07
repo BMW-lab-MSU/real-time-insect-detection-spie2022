@@ -17,10 +17,6 @@ classdef SkewnessTests < matlab.unittest.TestCase
             expected = skewness(data, 1, 2);
             result = codegenSkewness(data);
 
-            % The very large majority of the results are within
-            % 2*eps (twice the precision of doubles) of the expected
-            % answers. Being off by a few times the machine precision
-            % is no big deal.
             testCase.verifyEqual(result, expected, ...
                 "AbsTol", eps(class(result)));
         end
@@ -32,10 +28,6 @@ classdef SkewnessTests < matlab.unittest.TestCase
             expected = skewness(data, 1, 2);
             result = codegenSkewness(data);
 
-            % The very large majority of the results are within
-            % 2*eps (twice the precision of doubles) of the expected
-            % answers. Being off by a few times the machine precision
-            % is no big deal.
             testCase.verifyEqual(result, expected, ...
                 "AbsTol", eps(class(result)));
         end
