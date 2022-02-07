@@ -173,7 +173,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             result = findHarmonics(peakLocations, fundamentalLoc, nHarmonics);
 
             % results need to be within 3 bins; that's what the findHarmonics algorithm looks for
-            testCase.verifyEqual(result, expected, "AbsTol", 3);
+            testCase.verifyEqual(result, expected, "AbsTol", 2);
         end
 
         % NOTE: this test fails, but that's because I didn't use any minimum 
@@ -261,7 +261,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             result = findHarmonics(peakLocations, fundamentalLoc, nHarmonics);
 
             % results need to be within 3 bins; that's what the findHarmonics algorithm looks for
-            testCase.verifyEqual(result, expected, "AbsTol", 3);
+            testCase.verifyEqual(result, expected, "AbsTol", 2);
         end
     end
 end
