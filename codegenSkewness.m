@@ -7,12 +7,24 @@ function s = codegenSkewness(x)
 
 %#codegen
 
+xCentered = zeros(size(x), 'like', x);
+xCentered2 = zeros(size(x), 'like', x);
+xCentered3 = zeros(size(x), 'like', x);
+secondMoment = zeros(size(x), 'like', x);
+thirdMoment = zeros(size(x), 'like', x);
+denominator = zeros(size(x), 'like', x);
+s = zeros(size(x), 'like', x);
+
 
 xCentered = x - mean(x,2);
 
-secondMoment = mean(xCentered.^2, 2);
+xCentered2 = xCentered .* xCentered;
+xCentered3 = xCentered2 .* xCentered;
 
-thirdMoment = mean(xCentered.^3, 2);
+
+secondMoment = mean(xCentered2, 2);
+
+thirdMoment = mean(xCentered3, 2);
 
 denominator = sqrt(secondMoment.^3);
 
