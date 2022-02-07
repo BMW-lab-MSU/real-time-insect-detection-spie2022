@@ -1,9 +1,10 @@
-function harmonicLocations = findHarmonics(peakLocations, fundamentalLocation, nHarmonics)
+function [harmonicLocations, harmonicIdx] = findHarmonics(peakLocations, fundamentalLocation, nHarmonics)
 
 nBins = 3;
 
 harmonicLocations = zeros(nHarmonics, 1, 'like', peakLocations);
 harmonicFreqs = zeros(nHarmonics, 1, 'like', peakLocations);
+harmonicIdx = zeros(nHarmonics, 1, 'like', peakLocations);
 
 % MATLAB indexing starts at one, so we need to remove 1 from the frequency
 % location to get the actual frequency index/bin
@@ -24,10 +25,12 @@ for i = 1:numel(peakLocations)
                 previousFreqDiff = abs(harmonicFreqs(harmonicNum) - harmonic);
                 if freqDiff < previousFreqDiff
                     harmonicFreqs(harmonicNum) = peakFreqs(i);
+                    harmonicIdx(harmonicNum) = i;
                 end
             else
                 % this is the first harmonic candidate we've found
                 harmonicFreqs(harmonicNum) = peakFreqs(i);
+                harmonicIdx(harmonicNum) = i;
             end
         end
     end

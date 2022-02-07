@@ -35,6 +35,36 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
 
             testCase.verifyEqual(result, expected);
         end
+        function testHarmonicIdx(testCase)
+
+            nHarmonics = 3;
+
+            fundamentalFreq = 100;
+            samplingFreq = 2000;
+            t = 0:1/samplingFreq:999/samplingFreq;
+
+            sin1 = sin(2 * pi * fundamentalFreq * t);
+            sin2 = sin(2 * pi * 2 * fundamentalFreq * t);
+            sin3 = sin(2 * pi * 3 * fundamentalFreq * t);
+            x = sin1 + sin2 + sin3;
+
+            expectedPeakLoc = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3] + 1);
+
+            psd = abs(fft(x)).^2;
+            psd = psd(1:floor(end/2));
+
+            fundamentalLoc = estimateFundamentalFreq(psd);
+
+            [~, peakLocations] = findpeaks(psd);
+            
+            expectedIdx = find(sum(peakLocations == expectedPeakLoc)).';
+
+
+            [resultPeakLoc, resultIdx] = findHarmonics(peakLocations, fundamentalLoc, nHarmonics);
+
+            testCase.verifyEqual(resultPeakLoc, expectedPeakLoc);
+            testCase.verifyEqual(resultIdx, expectedIdx);
+        end
         function testSinusoidsPhaseOffset(testCase)
 
             nHarmonics = 3;
