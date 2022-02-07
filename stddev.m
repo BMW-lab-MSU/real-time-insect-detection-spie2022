@@ -5,7 +5,7 @@ function s = stddev(x, avg)
 normalization = size(x,2) - 1;
 
 partial1 = (x - avg);
-partial2 = real(partial1).^2 + imag(partial1).^2;
+partial2 = partial1 .* partial1;
 partial3 = sum(partial2, 2);
 partial4 = partial3 / normalization;
 s = sqrt(partial4);
