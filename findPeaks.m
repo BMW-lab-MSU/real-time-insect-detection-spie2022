@@ -43,7 +43,7 @@ function [locations] = localMaxima1d(x)
 %   - locations: the indices of each maxima/peak
 
 % preallocate; there can't be more maxima than half the size of x
-locations = zeros(1, numel(x)/2, 'like', x);
+locations = zeros(1, floor(numel(x)/2), 'like', x);
 nPeaksIdx = 1;
 
 
