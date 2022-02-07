@@ -3,7 +3,7 @@ function features = extractHarmonicFeatures(psd, nHarmonics)
 %
 %   features = extractHarmonicFeatures(psd, nHarmonics) extracts features from
 %   the power spectral density, psd, for nHarmonics harmonics. psd is a
-%   one-sided power spectral density magnitude, i.e. abs(fft(X).^2). 
+%   one-sided power spectral density magnitude, i.e. abs(fft(X)).^2. 
 %
 %   The extracted features for each harmonic are:
 %       'HarmonicHeight'            - The height of the harmonic
@@ -44,27 +44,17 @@ for i = 1:nRows
     % Get features for all peaks
     [peakHeight, peakLoc, peakWidth, peakProminence] = findPeaks(psd(i,:));
 
-    % Compute how close the each peaks' frequency bin is to being an integer
-    % multiple of the fundamental frequency.
-    % TODO: I think this could be done with rem()
-    freqBinDiffs = peakLoc/fundamental(i) - fix(peakLoc/fundamental(i));
-
-    % Find the peak locations that are within nBins of an integer multiple of
-    % the fundamental frequency.
-    tmp = find(1 - freqBinDiffs <= nBins/fundamental(i) | freqBinDiffs <= nBins/fundamental(i));
+    % Grab the peaks that are harmonics of the fundamental
+    [harmonicLoc(i,:), harmonicIdx] = findHarmonics(peakLoc, fundamental(i), nHarmonics);
     
-    % Grab the peaks that are harmonics of the fundamental; if there are less
-    % than nHarmonics, the missing harmonics are set as NaN.
-    if numel(tmp) >= 3
-        harmonicLoc(i,:) = peakLoc(tmp(1:nHarmonics));
-        harmonicWidth(i,:) = peakWidth(tmp(1:nHarmonics));
-        harmonicProminence(i,:) = peakProminence(tmp(1:nHarmonics));
-        harmonicHeight(i,:) = peakHeight(tmp(1:nHarmonics));
-    else
-        harmonicLoc(i,1:numel(tmp)) = peakLoc(tmp);
-        harmonicWidth(i,1:numel(tmp)) = peakWidth(tmp);
-        harmonicProminence(i,1:numel(tmp)) = peakProminence(tmp);
-        harmonicHeight(i,1:numel(tmp)) = peakHeight(tmp);
+    % Get features for the harmonics. If a harmonic wasn't found, harmonicIdx
+    % will be 0. All related features to be 0 if the harmonic wasn't found.
+    for j = 1:numel(harmonicIdx)
+        if harmonicIdx(j) ~= 0
+            harmonicWidth(i,j) = peakWidth(harmonicIdx(j));
+            harmonicProminence(i,j) = peakProminence(harmonicIdx(j));
+            harmonicHeight(i,j) = peakHeight(harmonicIdx(j));
+        end
     end
     
     % Compute feature ratios for all n-choose-2 combinations of harmonics
