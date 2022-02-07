@@ -4,5 +4,9 @@ function y = medianAbsDeviation(x)
 %#codegen
 
 xMedian = median(x, 2);
-deviationsFromMedian = abs(x - xMedian);
+
+difference = x - xMedian;
+
+deviationsFromMedian = sign(difference) .* difference;
+
 y = median(deviationsFromMedian, 2);
