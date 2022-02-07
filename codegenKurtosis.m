@@ -7,12 +7,25 @@ function k = codegenKurtosis(x)
 
 %#codegen
 
-xCentered = x - mean(x,2);
+xCentered = zeros(size(x), 'like', x);
+xCentered2 = zeros(size(x), 'like', x);
+xCentered3 = zeros(size(x), 'like', x);
+xCentered4 = zeros(size(x), 'like', x);
+secondMoment = zeros(size(x,1), 1, 'like', x);
+fourthMoment = zeros(size(x,1), 1, 'like', x);
+denominator = zeros(size(x,1), 1, 'like', x);
+k = zeros(size(x,1), 1, 'like', x);
 
-secondMoment = mean(xCentered.^2, 2);
+xCentered(:) = x - mean(x,2);
+xCentered2(:) = xCentered .* xCentered;
+xCentered3(:) = xCentered2 .* xCentered;
+xCentered4(:) = xCentered3 .* xCentered;
 
-fourthMoment = mean(xCentered.^4, 2);
 
-denominator = secondMoment.^2;
+secondMoment(:) = mean(xCentered2, 2);
 
-k = fourthMoment ./ denominator;
+fourthMoment(:) = mean(xCentered4, 2);
+
+denominator(:) = secondMoment .* secondMoment;
+
+k(:) = fourthMoment ./ denominator;

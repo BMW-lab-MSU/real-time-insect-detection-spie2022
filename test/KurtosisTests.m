@@ -9,7 +9,7 @@ classdef KurtosisTests < matlab.unittest.TestCase
     end
 
     methods (Test)
-        function testAgainstMatlabImplementation(testCase)
+        function testAgainstMatlabImplementationDoubles(testCase)
             % Make sure my codegen-ready version does the same thing
             % as the original code
 
@@ -17,7 +17,19 @@ classdef KurtosisTests < matlab.unittest.TestCase
             expected = kurtosis(data, 1, 2);
             result = codegenKurtosis(data);
 
-            testCase.verifyEqual(result, expected);
+            testCase.verifyEqual(result, expected, ...
+                "AbsTol", 10*eps(class(result)));
+        end
+        function testAgainstMatlabImplementationSingles(testCase)
+            % Make sure my codegen-ready version does the same thing
+            % as the original code
+
+            data = rand(10000, 500, 'single');
+            expected = kurtosis(data, 1, 2);
+            result = codegenKurtosis(data);
+
+            testCase.verifyEqual(result, expected, ...
+                "AbsTol", 10*eps(class(result)));
         end
     end
 end
