@@ -18,9 +18,11 @@ function features = extractPsdStats(psd)
 
 %#codegen
 
+features = zeros(1,6, 'like', psd);
+
 avgPsd = mean(psd, 2);
 stdPsd = stddev(psd, avgPsd);
-medianPsd = median(psd, 2);
+medianPsd = codegenMedian(psd);
 madPsd = medianAbsDeviation(psd);
 skewnessPsd = codegenSkewness(psd);
 skewnessPsd = skewnessPsd - mean(skewnessPsd);
@@ -28,7 +30,13 @@ kurtosisPsd = codegenKurtosis(psd);
 kurtosisPsd = kurtosisPsd - mean(kurtosisPsd);
 
 
-features = [avgPsd, stdPsd, medianPsd, madPsd, skewnessPsd, kurtosisPsd];
+features(1) = avgPsd;
+features(2) = stdPsd;
+features(3) = medianPsd;
+features(4) = madPsd;
+features(5) = skewnessPsd;
+features(6) = kurtosisPsd;
+% features = [avgPsd, stdPsd, medianPsd, madPsd, skewnessPsd, kurtosisPsd];
 % features.MeanPsd = avg_psd;
 % features.StdPsd = std_psd;
 % features.MedianPsd = median_psd;

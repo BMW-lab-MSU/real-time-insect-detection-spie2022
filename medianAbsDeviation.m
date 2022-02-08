@@ -3,10 +3,10 @@ function y = medianAbsDeviation(x)
 
 %#codegen
 
-xMedian = median(x, 2);
+xMedian = codegenMedian(x);
 
 difference = x - xMedian;
 
 deviationsFromMedian = sign(difference) .* difference;
 
-y = median(deviationsFromMedian, 2);
+y = codegenMedian(deviationsFromMedian);

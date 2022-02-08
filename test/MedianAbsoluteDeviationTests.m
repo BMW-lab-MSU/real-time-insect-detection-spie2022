@@ -13,7 +13,7 @@ classdef MedianAbsoluteDeviationTests < matlab.unittest.TestCase
             % Make sure my codegen-ready version does the same thing
             % as the original code
 
-            data = rand(200, 32);
+            data = rand(1, 32);
             expected = mad(data, 1, 2);
             result = medianAbsDeviation(data);
 
