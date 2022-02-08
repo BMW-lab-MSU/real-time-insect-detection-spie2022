@@ -90,8 +90,8 @@ for peakNum = 1:numel(locations)
     % locations == 0 means there wasn't a peak, so skip those
     if locations(peakNum) ~= 0
         location = locations(peakNum);
-        iMin = 1;
-        iMax = numel(x);
+        iMin = cast(1, 'like', locations);
+        iMax = cast(numel(x), 'like', locations);
 
         % Find the left base in interval [iMin, location]
         leftBases(peakNum) = location;
