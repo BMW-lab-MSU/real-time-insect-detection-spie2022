@@ -1,5 +1,6 @@
 function [harmonicLocations, harmonicIdx] = findHarmonics(peakLocations, fundamentalLocation, nHarmonics)
 
+nHarmonics = 3;
 nBins = 2;
 
 harmonicLocations = zeros(nHarmonics, 1, 'like', peakLocations);
@@ -41,6 +42,8 @@ harmonicLocations = harmonicFreqs + 1;
 % When we don't find a particular harmonic, e.g. harmonic 2 because the
 % the harmonics are all odd, we want to return a 0 (or a NaN) to indicate that 
 % no harmonic was found at that location.
-harmonicLocations(harmonicLocations == 1) = 0;
-
-    
+for i = 1:nHarmonics
+    if harmonicLocations(i) == 1
+        harmonicLocations(i) = 0;
+    end
+end
