@@ -19,11 +19,6 @@ VECTOR_LEN = 64;
 % FFT_LENGTH/VECTOR_LEN
 N_CHUNKS = 16; 
 
-% System objects need to be persistent for HDL code generation
-persistent ft;
-if isempty(ft)
-    ft = dsp.HDLFFT('FFTLength', 1024, 'BitReversedOutput', false);
-end
 % persistent loopCount
 % if isempty(loopCount)
 %     % Number of iterations needed to get the all the data through
@@ -49,6 +44,7 @@ yValid = complex(zeros(size(xVect), 'like', xVect));
 
 
 i = cast(0, 'uint8');
+j = cast(1, 'uint8');
 
 for loop = 1:131
     % Select which 64-length portion of the signal to feed into the fft
@@ -67,10 +63,18 @@ for loop = 1:131
     % portion of the input signal. After that, the input data is 
     % invalid, but we need the extra computation cycles to get
     % the output data out of the fft due to the latency.
-    validIn = loop <= N_CHUNKS;
-    [yVect(:,loop), validOut(loop)] = ft(xVect(:,i), validIn);
+    validIn = loop <= 16;
+    [yVect(:,loop), validOut(loop)] = internalfft(xVect(:,i), validIn);
+
+    if validOut(loop)
+        yValid(:, j) = yVect(:,loop);
+        j = j + 1;
+    end
 end
 
 % Grab the valid output data and flatten it back into a column vector
-yValid(:) = yVect(:,validOut==1);
+
+% yValid(:) = yVect(:,validOut==1);
 y(:) = yValid(:);
+
+end
