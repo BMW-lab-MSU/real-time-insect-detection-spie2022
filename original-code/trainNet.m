@@ -10,10 +10,10 @@ end
 statset('UseParallel', true);
 
 %% Load data
-load([datadir filesep 'codegen-training' filesep 'trainingData.mat']);
+load([datadir filesep 'training' filesep 'trainingData.mat']);
 
-load([datadir filesep 'codegen-training' filesep 'samplingTuningNet'])
-load([datadir filesep 'codegen-training' filesep 'hyperparameterTuningNet'], 'bestParams')
+load([datadir filesep 'training' filesep 'samplingTuningNet'])
+load([datadir filesep 'training' filesep 'hyperparameterTuningNet'], 'bestParams')
 undersamplingRatio = result.undersamplingRatio
 nAugment = result.nAugment
 params = bestParams
@@ -45,8 +45,8 @@ clear('synthFeatures', 'synthLabels');
 %% Train the model
 model = nnet(features, labels, params);
 
-mkdir([datadir filesep 'codegen-training' filesep 'models']);
-save([datadir filesep 'codegen-training' filesep 'models' filesep 'nnet'], 'model');
+mkdir([datadir filesep 'training' filesep 'models']);
+save([datadir filesep 'training' filesep 'models' filesep 'nnet'], 'model');
 
 %% Model fitting function
 function model = nnet(data, labels, params)

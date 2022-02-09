@@ -13,21 +13,15 @@ function features = extractTimeDomainFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-%#codegen
-
 rowMean = mean(X, 2);
 imageMean = mean(X(:));
 
-rowStd = stddev(X, rowMean);
+rowStd = std(X, 0, 2);
 
-firstDiff = X(:, 2:end) - X(:, 1:end-1);
+maxDiff = max(abs(diff(X, 1, 2)), [], 2);
 
-absFirstDiff = abs(firstDiff);
-
-maxDiff = max(absFirstDiff, [], 2);
-
-features = [rowMean - imageMean, rowStd, maxDiff];
-% features.RowMeanMinusImageMean = rowMean - imageMean;
-% features.StdDev = rowStd;
-% features.MaxDiff = maxDiff;
+features = table;
+features.RowMeanMinusImageMean = rowMean - imageMean;
+features.StdDev = rowStd;
+features.MaxDiff = maxDiff;
 end

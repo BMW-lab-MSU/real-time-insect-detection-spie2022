@@ -16,36 +16,32 @@ function features = extractPsdStats(psd)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-avg_psd = mean(psd, 2);
-std_psd = std(psd, 0, 2);
-median_psd = median(psd, 2);
-mad_psd = mad(psd, 1, 2);
-skew_psd = skewness(psd, 1, 2);
-skew_psd = skew_psd - mean(skew_psd);
-kurtosis_psd = kurtosis(psd, 1, 2);
-kurtosis_psd = kurtosis_psd - mean(kurtosis_psd);
+%#codegen
 
-% compute the index at which 99% of energy is contained
-% energypct = cumsum(psd,2)./sum(psd,2);
-% energy99pct = zeros(height(psd), 1);
-% energy99pct_no_dc = zeros(height(psd), 1);
+features = zeros(1,6, 'like', psd);
 
-% for row = 1:height(psd)
-%     % ignore dc component because it contains basically all the energy
-%     % NOTE: actually, ignoring the dc component might not be important;
-%     %       in this case, removing the dc component only makes a difference
-%     %       of 1 index at most
-%     energy99pct(row) = find(energypct(row,1:end) >= 0.99, 1);
-%     energy99pct_no_dc(row) = find(energypct(row,2:end) >= 0.99, 1);
-% end
+avgPsd = mean(psd, 2);
+stdPsd = stddev(psd, avgPsd);
+medianPsd = codegenMedian(psd);
+madPsd = medianAbsDeviation(psd);
+skewnessPsd = codegenSkewness(psd);
+skewnessPsd = skewnessPsd - mean(skewnessPsd);
+kurtosisPsd = codegenKurtosis(psd);
+kurtosisPsd = kurtosisPsd - mean(kurtosisPsd);
 
-features = table;
-features.MeanPsd = avg_psd;
-features.StdPsd = std_psd;
-features.MedianPsd = median_psd;
-features.MadPsd = mad_psd;
-features.SkewnessPsd = skew_psd;
-features.KurtosisPsd = kurtosis_psd;
-% features.Bin99PctEnergy = energy99pct;
+
+features(1) = avgPsd;
+features(2) = stdPsd;
+features(3) = medianPsd;
+features(4) = madPsd;
+features(5) = skewnessPsd;
+features(6) = kurtosisPsd;
+% features = [avgPsd, stdPsd, medianPsd, madPsd, skewnessPsd, kurtosisPsd];
+% features.MeanPsd = avg_psd;
+% features.StdPsd = std_psd;
+% features.MedianPsd = median_psd;
+% features.MadPsd = mad_psd;
+% features.SkewnessPsd = skew_psd;
+% features.KurtosisPsd = kurtosis_psd;
 
 end

@@ -18,7 +18,7 @@ insectIdx = find(labels == 1);
 
 synthData = createSyntheticData(data(insectIdx, :), nAugmented, nWorkers);
 
-newFeatures = extractFeatures(synthData);
+newFeatures = extractFeatures(synthData, 'UseParallel', opts.UseParallel);
 
 labels = true(height(newFeatures), 1);
 end

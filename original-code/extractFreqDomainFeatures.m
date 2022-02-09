@@ -1,14 +1,8 @@
-function features = extractFeatures(X)
-% extractFeatures extract features for insect detection
+function features = extractFreqDomainFeatures(X, opts)
+% extractFreqDomainFeatures extract frequency-domain features for insect
+% detection
 %
-%   features = extractFeatures(X) extracts features from the data matrix, X,
-%   and returns the features as a table. Observations are rows in X.
-%
-%   The extracted time-domain features are:
-%       'RowMeanMinusImageMean' - The mean of the obvservation minus the mean
-%                                 of the entire image
-%       'StdDev'                - The standard deviation of each row
-%       'MaxDiff'               - The maximum absolute first difference in a row
+%   features = extractFreqDomainFeatures(X) extracts features from the data %   %   matrix, X, and returns the features as a table. Observations are rows in X.
 %
 %   The extracted PSD statistics are:
 %       'MeanPsd'                   - The mean of the PSD
@@ -31,11 +25,23 @@ function features = extractFeatures(X)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-%#codegen
+arguments
+    X (:,:) {mustBeNumeric}
+    opts.UseParallel (1,1) logical = false
+end
 
-features = zeros(size(X,1), 30, 'like', X);
+nHarmonics = 3;
 
-features(:,1:3) = extractTimeDomainFeatures(X);
-features(:,4:30) = extractFreqDomainFeatures(X);
+psd = abs(fft(X, [], 2).^2);
 
+% Only look at the positive frequencies
+psd = psd(:,1:end/2);
+
+% Normalize by the DC component
+psd = psd./psd(:,1);
+
+psdStats = extractPsdStats(psd);
+harmonicFeatures = extractHarmonicFeatures(psd, nHarmonics, 'UseParallel', opts.UseParallel);
+
+features = [psdStats, harmonicFeatures];
 end

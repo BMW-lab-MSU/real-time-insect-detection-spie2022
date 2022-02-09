@@ -17,6 +17,11 @@ classdef FindPeaksTests < matlab.unittest.TestCase
 
             [heights, locations, ~, ~] = findPeaks(data);
 
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            heights = heights(heights ~= 0);
+            locations = locations(locations ~= 0);
+
             testCase.verifyEqual(heights, expectedHeights);
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end
@@ -38,28 +43,29 @@ classdef FindPeaksTests < matlab.unittest.TestCase
 
             [heights, locations, widths, prominences] = findPeaks(PeakSig);
 
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            heights = heights(heights ~= 0);
+            locations = locations(locations ~= 0);
+            widths = widths(widths ~= 0);
+            prominences = prominences(prominences ~= 0);
+
             testCase.verifyEqual(heights, expectedHeights);
             testCase.verifyEqual(double(locations), double(expectedLocations));
             testCase.verifyEqual(widths, expectedWidths);
             testCase.verifyEqual(prominences, expectedProminences);
         end
-        function testOddPlateau(testCase)
-            % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
+        function testPlateau(testCase)
+            % MATLAB's findpeaks finds the left-most index of a plateau. My implementation should do the same.
             data = [25 8 15 5 6 10 10 10 3 1 20 2];
 
-            expectedLocations = [3 7 11];
+            expectedLocations = [3 6 11];
 
             [~, locations, ~, ~] = findPeaks(data);
 
-            testCase.verifyEqual(double(locations), double(expectedLocations));
-        end
-        function testEvenPlateau(testCase)
-            % MATLAB's findpeaks does not find the midpoint of the plateau, but scipy's implementation does (which I what I translated). This test case is to make sure the findPeaks returns the plateau's midpoint.
-            data = [25 8 15 5 6 10 10 10 10 3 1 20 2];
-
-            expectedLocations = [3 8 12];
-
-            [~, locations, ~, ~] = findPeaks(data);
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            locations = locations(locations ~= 0);
 
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end
@@ -70,6 +76,10 @@ classdef FindPeaksTests < matlab.unittest.TestCase
             expectedLocations = [3 6];
 
             [~, locations, ~, ~] = findPeaks(data);
+
+            % Remove extra entries; findPeaks needs to return a
+            % constant-sized array to be HDL-compatible.
+            locations = locations(locations ~= 0);
 
             testCase.verifyEqual(double(locations), double(expectedLocations));
         end

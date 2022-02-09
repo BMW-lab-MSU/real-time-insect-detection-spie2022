@@ -1,8 +1,8 @@
-function features = extractFreqDomainFeatures(X, opts)
+function features = extractFreqDomainFeatures(X)
 % extractFreqDomainFeatures extract frequency-domain features for insect
 % detection
 %
-%   features = extractFreqDomainFeatures(X) extracts features from the data %   %   matrix, X, and returns the features as a table. Observations are rows in X.
+%   features = extractFreqDomainFeatures(X) extracts features from the data   %   matrix, X, and returns the features as a table. Observations are rows in X.
 %
 %   The extracted PSD statistics are:
 %       'MeanPsd'                   - The mean of the PSD
@@ -25,23 +25,35 @@ function features = extractFreqDomainFeatures(X, opts)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-arguments
-    X (:,:) {mustBeNumeric}
-    opts.UseParallel (1,1) logical = false
-end
+%#codegen
 
+
+% NUM_FREQ_FEATURES = 27;
+features = zeros(size(X,1), 27, 'like', X);
 nHarmonics = 3;
 
-psd = abs(fft(X, [], 2).^2);
+esd = zeros(size(X), 'like', X);
+oneSidedEsd = zeros(size(X,1), size(X,2)/2, 'like', X);
+
+spectrum = complex(zeros(size(X), 'like', X));
+
+% hdlfft doesn't support matrices, only vectors, so we need to process
+% one row at a time.
+ for i = 1:size(X,1)
+     % dsp.HDLFFT works on columns, so I have to transpose so the observations
+     % are in columns and then transpose back so they are in rows again.
+     spectrum(i,:) = hdlfft(X(i,:).').';
+ end
+%spectrum = fft(X, [], 2);
+esd = real(spectrum).^2 + imag(spectrum).^2;
 
 % Only look at the positive frequencies
-psd = psd(:,1:end/2);
+oneSidedEsd = esd(:,1:end/2);
 
 % Normalize by the DC component
-psd = psd./psd(:,1);
+oneSidedEsd = oneSidedEsd./oneSidedEsd(:,1);
 
-psdStats = extractPsdStats(psd);
-harmonicFeatures = extractHarmonicFeatures(psd, nHarmonics, 'UseParallel', opts.UseParallel);
+features(:,1:6) = extractPsdStats(oneSidedEsd);
+features(:,7:27) = extractHarmonicFeatures(oneSidedEsd);
 
-features = [psdStats, harmonicFeatures];
 end

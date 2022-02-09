@@ -9,13 +9,15 @@ function hps = harmonicProductSpectrum(spectrum, nSpectra)
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-%#codegen
+rows = height(spectrum);
+cols = floor(width(spectrum) / nSpectra);
+spectra = zeros(nSpectra, rows, cols, 'like', spectrum);
+hps = zeros(rows, cols, 'like', spectrum);
 
-cols = floor(512/3);
+% Downsample the spectrum
+for j = 1:nSpectra
+    spectra(j, :, :) = spectrum(:, 1:j:(j * cols));
+end
 
-
-hps = spectrum(:,1:cols);
-hps(:) = hps .* spectrum(:,1:2:2*cols);
-hps(:) = hps .* spectrum(:,1:3:3*cols);
-
+hps = squeeze(prod(spectra));
 end

@@ -2,7 +2,7 @@
 %% Setup
 clear
 
-if isempty(gcp('nocreate'))
+if ~exist(gcp('nocreate'))
     parpool();
 end
 
@@ -19,8 +19,8 @@ load([datadir filesep datafile])
 %% Extract features
 scanFeatures = cell(numel(scans), 1);
 
-parfor i = 1:numel(scans)
-    scanFeatures{i} = cellfun(@(X) extractFeatures(X), ...
+for i = progress(1:numel(scans))
+    scanFeatures{i} = cellfun(@(X) extractFeatures(X, 'UseParallel', true), ...
         scans(i).Data, 'UniformOutput', false);
 end
 
@@ -49,12 +49,12 @@ crossvalPartition = cvpartition(scanLabels(training(holdoutPartition)), ...
 
 
 %% Save training and testing data
-mkdir(datadir, 'codegen-testing');
-save([datadir filesep 'codegen-testing' filesep 'testingData.mat'], ...
+mkdir(datadir, 'testing');
+save([datadir filesep 'testing' filesep 'testingData.mat'], ...
     'testingData', 'testingFeatures', 'testingLabels', ...
     'holdoutPartition', 'scanLabels', '-v7.3');
 
-mkdir(datadir, 'codegen-training');
-save([datadir filesep 'codegen-training' filesep 'trainingData.mat'], ...
+mkdir(datadir, 'training');
+save([datadir filesep 'training' filesep 'trainingData.mat'], ...
     'trainingData', 'trainingFeatures', 'trainingLabels', ...
     'crossvalPartition', 'holdoutPartition', 'scanLabels', '-v7.3');

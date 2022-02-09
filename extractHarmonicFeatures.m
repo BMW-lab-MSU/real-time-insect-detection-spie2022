@@ -1,9 +1,9 @@
-function features = extractHarmonicFeatures(psd, nHarmonics, opts)
+function features = extractHarmonicFeatures(psd)
 % extractHarmonicFeatures extract features related to harmonics in the PSD.
 %
 %   features = extractHarmonicFeatures(psd, nHarmonics) extracts features from
 %   the power spectral density, psd, for nHarmonics harmonics. psd is a
-%   one-sided power spectral density magnitude, i.e. abs(fft(X).^2). 
+%   one-sided power spectral density magnitude, i.e. abs(fft(X)).^2. 
 %
 %   The extracted features for each harmonic are:
 %       'HarmonicHeight'            - The height of the harmonic
@@ -19,100 +19,107 @@ function features = extractHarmonicFeatures(psd, nHarmonics, opts)
 % SPDX-License-Identifier: BSD-3-Clause
 
 % TODO: make nBins an input parameter
-arguments
-    psd (:,:) {mustBeNumeric}
-    nHarmonics (1,1) double
-    opts.UseParallel (1,1) logical = false
-end
+
+%#codegen
 
 nBins = 2;
-nRows = height(psd);
+nRows = size(psd,1);
 
-harmonicCombinations = nchoosek(1:nHarmonics, 2);
-nHarmonicCombinations = height(harmonicCombinations);
+nHarmonics = 3;
 
-peakHeight = cell(nRows, 1);
-peakLoc = cell(nRows, 1);
-peakWidth = cell(nRows, 1);
-peakProminence = cell(nRows, 1);
+harmonicCombinations = [1 2; 1 3; 2 3];
+% harmonicCombinations = nchoosek(1:nHarmonics, 2);
+nHarmonicCombinations = 3;
 
-harmonicHeight = nan(nRows, nHarmonics, 'like', psd);
-harmonicLoc = nan(nRows, nHarmonics, 'like', psd);
-harmonicWidth = nan(nRows, nHarmonics, 'like', psd);
-harmonicProminence = nan(nRows, nHarmonics, 'like', psd);
-harmonicHeightRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
-harmonicWidthRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
-harmonicProminenceRatio = nan(nRows, nHarmonicCombinations, 'like', psd);
+harmonicHeight = zeros(size(psd,1), 3, 'like', psd);
+harmonicLoc = zeros(size(psd,1), 3, 'like', psd);
+harmonicWidth = zeros(size(psd,1), 3, 'like', psd);
+harmonicProminence = zeros(size(psd,1), 3, 'like', psd);
+harmonicHeightRatio = zeros(size(psd,1), 3, 'like', psd);
+harmonicWidthRatio = zeros(size(psd,1), 3, 'like', psd);
+harmonicProminenceRatio = zeros(size(psd,1), 3, 'like', psd);
 
-fundamental = estimateFundamentalFreq(psd, 'UseParallel', opts.UseParallel);
+fundamental = estimateFundamentalFreq(psd);
 
-if opts.UseParallel
-    nWorkers = gcp('nocreate').NumWorkers;
-else
-    nWorkers = 0;
-end
-
-parfor (i = 1:nRows, nWorkers)
+for i = 1:size(psd,1)
     % Get features for all peaks
-    [peakHeight{i}, peakLoc{i}, peakWidth{i}, peakProminence{i}] = findpeaks(psd(i,:));
-    peakHeight{i} = single(peakHeight{i});
-    peakLoc{i} = single(peakLoc{i});
-    peakWidth{i} = single(peakWidth{i});
-    peakProminence{i} = single(peakProminence{i});
-end
+    [peakHeight, peakLoc, peakWidth, peakProminence] = findPeaks(psd(i,:));
 
-for i = 1:nRows
-    % Compute how close the each peaks' frequency bin is to being an integer
-    % multiple of the fundamental frequency.
-    % TODO: I think this could be done with rem()
-    freqBinDiffs = peakLoc{i}/fundamental(i) - fix(peakLoc{i}/fundamental(i));
-
-    % Find the peak locations that are within nBins of an integer multiple of
-    % the fundamental frequency.
-    tmp = find(1 - freqBinDiffs <= nBins/fundamental(i) | freqBinDiffs <= nBins/fundamental(i));
+    % Grab the peaks that are harmonics of the fundamental
+    [harmonicLoc(i,:), harmonicIdx] = findHarmonics(peakLoc, fundamental(i), nHarmonics);
     
-    % Grab the peaks that are harmonics of the fundamental; if there are less
-    % than nHarmonics, the missing harmonics are set as NaN.
-    if numel(tmp) >= nHarmonics
-        harmonicLoc(i,:) = peakLoc{i}(tmp(1:nHarmonics));
-        harmonicWidth(i,:) = peakWidth{i}(tmp(1:nHarmonics));
-        harmonicProminence(i,:) = peakProminence{i}(tmp(1:nHarmonics));
-        harmonicHeight(i,:) = peakHeight{i}(tmp(1:nHarmonics));
-    else
-        harmonicLoc(i,1:numel(tmp)) = peakLoc{i}(tmp);
-        harmonicWidth(i,1:numel(tmp)) = peakWidth{i}(tmp);
-        harmonicProminence(i,1:numel(tmp)) = peakProminence{i}(tmp);
-        harmonicHeight(i,1:numel(tmp)) = peakHeight{i}(tmp);
+    % Get features for the harmonics. If a harmonic wasn't found, harmonicIdx
+    % will be 0. All related features to be 0 if the harmonic wasn't found.
+    for j = 1:numel(harmonicIdx)
+        if harmonicIdx(j) ~= 0
+            harmonicWidth(i,j) = peakWidth(harmonicIdx(j));
+            harmonicProminence(i,j) = peakProminence(harmonicIdx(j));
+            harmonicHeight(i,j) = peakHeight(harmonicIdx(j));
+        end
     end
     
     % Compute feature ratios for all n-choose-2 combinations of harmonics
-    for n = 1:nHarmonicCombinations
+    for n = 1:3
         % Get the harmonic numbers we are taking a ratio of
         harmonic1 = harmonicCombinations(n, 1);
         harmonic2 = harmonicCombinations(n, 2);
 
-        harmonicHeightRatio(i, n) = harmonicHeight(i, harmonic1) / harmonicHeight(1, harmonic2);
+        if harmonicHeight(i, harmonic2) ~= 0
+            harmonicHeightRatio(i, n) = harmonicHeight(i, harmonic1) / harmonicHeight(i, harmonic2);
+        else
+            harmonicHeightRatio(i, n) = 0;
+        end
 
-        harmonicWidthRatio(i, n) = harmonicWidth(i ,harmonic1) / harmonicWidth(1, harmonic2);
+        if harmonicWidth(i, harmonic2) ~= 0
+            harmonicWidthRatio(i, n) = harmonicWidth(i ,harmonic1) / harmonicWidth(i, harmonic2);
+        else
+            harmonicWidthRatio(i, n) = 0;
+        end
 
-        harmonicProminenceRatio(i, n) = harmonicProminence(i ,harmonic1) / harmonicProminence(1, harmonic2);
+        if harmonicProminence(i, harmonic2) ~= 0
+            harmonicProminenceRatio(i, n) = harmonicProminence(i ,harmonic1) / harmonicProminence(i, harmonic2);
+        else
+            harmonicProminenceRatio(i, n) = 0;
+        end
     end
 end
 
 % Assemble features into our output table
-features = table;
+% TODO: don't hardcode 21
+features = zeros(size(psd,1), 21, 'like', psd);
 
-for n = 1:nHarmonics
-    features.(['HarmonicHeight' num2str(n)]) = harmonicHeight(:, n);
-    features.(['HarmonicLoc' num2str(n)]) = harmonicLoc(:, n);
-    features.(['HarmonicWidth' num2str(n)]) = harmonicWidth(:, n);
-    features.(['HarmonicProminence' num2str(n)]) = harmonicProminence(:, n);
-end
+features(:,1) = harmonicHeight(:, 1);
+features(:,2) = harmonicLoc(:, 1);
+features(:,3) = harmonicWidth(:, 1);
+features(:,4) = harmonicProminence(:, 1);
+features(:,5) = harmonicHeight(:, 2);
+features(:,6) = harmonicLoc(:, 2);
+features(:,7) = harmonicWidth(:, 2);
+features(:,8) = harmonicProminence(:, 2);
+features(:,9) = harmonicHeight(:, 3);
+features(:,10) = harmonicLoc(:, 3);
+features(:,11) = harmonicWidth(:, 3);
+features(:,12) = harmonicProminence(:, 3);
+features(:,13) = harmonicHeightRatio(:, 1);
+features(:,14) = harmonicWidthRatio(:, 1);
+features(:,15) = harmonicProminenceRatio(:, 1);
+features(:,16) = harmonicHeightRatio(:, 2);
+features(:,17) = harmonicWidthRatio(:, 2);
+features(:,18) = harmonicProminenceRatio(:, 2);
+features(:,19) = harmonicHeightRatio(:, 3);
+features(:,20) = harmonicWidthRatio(:, 3);
+features(:,21) = harmonicProminenceRatio(:, 3);
 
-for n = 1:nHarmonicCombinations
-    ratioStr = strrep(num2str(harmonicCombinations(n,:)), ' ', '');
-    features.(['HarmonicHeightRatio' ratioStr]) = harmonicHeightRatio(:, n);
-    features.(['HarmonicWidthRatio' ratioStr]) = harmonicWidthRatio(:, n);
-    features.(['HarmonicProminenceRatio' ratioStr]) = harmonicProminenceRatio(:, n);
-end
+% for n = 1:nHarmonics
+%     features(:,1 + 4*(n-1)) = harmonicHeight(:, n);
+%     features(:,2 + 4*(n-1)) = harmonicLoc(:, n);
+%     features(:,3 + 4*(n-1)) = harmonicWidth(:, n);
+%     features(:,4 + 4*(n-1)) = harmonicProminence(:, n);
+% end
+
+% for n = 1:nHarmonicCombinations
+%     features(:,13 + 4*(n-1)) = harmonicHeightRatio(:, n);
+%     features(:,14 + 4*(n-1)) = harmonicWidthRatio(:, n);
+%     features(:,15 + 4*(n-1)) = harmonicProminenceRatio(:, n);
+% end
 end
