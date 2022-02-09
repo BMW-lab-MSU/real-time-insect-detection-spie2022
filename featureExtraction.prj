@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.matlabhdlcoder" plugin-version="R2020b">
-  <configuration file="/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/featureExtraction.prj" location="/vol/data/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022" name="featureExtraction" target="target.matlab.hdlcoder" target-name="HDL Code Generation">
+  <configuration file="/Users/trevvvy/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022/featureExtraction.prj" location="/Users/trevvvy/research/afrl/spie-real-time-imaging-and-deep-learning-2022/real-time-insect-detection-spie2022" name="featureExtraction" target="target.matlab.hdlcoder" target-name="HDL Code Generation">
     <param.AutoInferDefaultFile />
     <param.AutoInferUseVariableSize>false</param.AutoInferUseVariableSize>
     <param.AutoInferUseUnboundedSize>false</param.AutoInferUseUnboundedSize>
@@ -4186,7 +4186,7 @@
     <param.hdl.TargetInterface>
       <param.hdl.TargetInterface />
     </param.hdl.TargetInterface>
-    <param.hdl.TargetLanguage>option.hdl.VHDL</param.hdl.TargetLanguage>
+    <param.hdl.TargetLanguage />
     <param.hdl.CheckConformance>false</param.hdl.CheckConformance>
     <param.hdl.LaunchConformanceReport>false</param.hdl.LaunchConformanceReport>
     <param.hdl.GenerateHDLCode>true</param.hdl.GenerateHDLCode>
@@ -4307,10 +4307,10 @@
     <param.hdl.HDLLintInit />
     <param.hdl.HDLLintCmd />
     <param.hdl.HDLLintTerm />
-    <param.isHDLVerifierInstalled>true</param.isHDLVerifierInstalled>
+    <param.isHDLVerifierInstalled>false</param.isHDLVerifierInstalled>
     <param.hdl.GenerateHDLTestBench>false</param.hdl.GenerateHDLTestBench>
     <param.hdl.SimulateGeneratedCode>false</param.hdl.SimulateGeneratedCode>
-    <param.hdl.SimulationTool>ModelSim</param.hdl.SimulationTool>
+    <param.hdl.SimulationTool>No simulation tool available on system path</param.hdl.SimulationTool>
     <param.hdl.TestBenchPostfix>_tb</param.hdl.TestBenchPostfix>
     <param.hdl.ForceClock>true</param.hdl.ForceClock>
     <param.hdl.ClockHighTime>5</param.hdl.ClockHighTime>
@@ -4342,7 +4342,7 @@
     <param.hdl.CosimResetLength>2</param.hdl.CosimResetLength>
     <param.hdl.GenerateFILTestBench>false</param.hdl.GenerateFILTestBench>
     <param.hdl.FILLogOutputs>false</param.hdl.FILLogOutputs>
-    <param.hdl.FILBoardName>Choose a board</param.hdl.FILBoardName>
+    <param.hdl.FILBoardName>HDL Verifier installation or license is not available</param.hdl.FILBoardName>
     <param.hdl.FILConnection />
     <param.hdl.FILBoardIPAddress>192.168.0.2</param.hdl.FILBoardIPAddress>
     <param.hdl.FILBoardMACAddress>00-0A-35-02-21-8A</param.hdl.FILBoardMACAddress>
@@ -4623,11 +4623,9 @@
       <step key="category.workflow.fpgaturnkeyprogramtargetdevice" skipped="false" />
     </workflow>
     <matlab>
-      <root>/usr/local/MATLAB/R2021a</root>
+      <root>/Applications/MATLAB_R2021a.app</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
-        <toolbox name="embeddedcoder" />
-        <toolbox name="gpucoder" />
         <toolbox name="fixedpoint" />
         <toolbox name="matlabhdlcoder" />
         <toolbox name="neuralnetwork" />
@@ -4636,16 +4634,6 @@
         <matlabcoder>
           <enabled>true</enabled>
         </matlabcoder>
-      </toolbox>
-      <toolbox>
-        <embeddedcoder>
-          <enabled>true</enabled>
-        </embeddedcoder>
-      </toolbox>
-      <toolbox>
-        <gpucoder>
-          <enabled>true</enabled>
-        </gpucoder>
       </toolbox>
       <toolbox>
         <fixedpoint>
@@ -4665,17 +4653,17 @@
     </matlab>
     <platform>
       <unix>true</unix>
-      <mac>false</mac>
+      <mac>true</mac>
       <windows>false</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
-      <linux>true</linux>
+      <linux>false</linux>
       <solaris>false</solaris>
-      <osver>5.15.12-100.fc34.x86_64</osver>
+      <osver>10.16</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>glnxa64</arch>
+      <arch>maci64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>

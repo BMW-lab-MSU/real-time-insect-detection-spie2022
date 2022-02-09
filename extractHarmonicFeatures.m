@@ -1,4 +1,4 @@
-function features = extractHarmonicFeatures(psd, nHarmonics)
+function features = extractHarmonicFeatures(psd)
 % extractHarmonicFeatures extract features related to harmonics in the PSD.
 %
 %   features = extractHarmonicFeatures(psd, nHarmonics) extracts features from
@@ -25,22 +25,23 @@ function features = extractHarmonicFeatures(psd, nHarmonics)
 nBins = 2;
 nRows = size(psd,1);
 
+nHarmonics = 3;
 
 harmonicCombinations = [1 2; 1 3; 2 3];
 % harmonicCombinations = nchoosek(1:nHarmonics, 2);
-nHarmonicCombinations = size(harmonicCombinations, 1);
+nHarmonicCombinations = 3;
 
-harmonicHeight = zeros(nRows, nHarmonics, 'like', psd);
-harmonicLoc = zeros(nRows, nHarmonics, 'like', psd);
-harmonicWidth = zeros(nRows, nHarmonics, 'like', psd);
-harmonicProminence = zeros(nRows, nHarmonics, 'like', psd);
-harmonicHeightRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
-harmonicWidthRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
-harmonicProminenceRatio = zeros(nRows, nHarmonicCombinations, 'like', psd);
+harmonicHeight = zeros(size(psd,1), 3, 'like', psd);
+harmonicLoc = zeros(size(psd,1), 3, 'like', psd);
+harmonicWidth = zeros(size(psd,1), 3, 'like', psd);
+harmonicProminence = zeros(size(psd,1), 3, 'like', psd);
+harmonicHeightRatio = zeros(size(psd,1), 3, 'like', psd);
+harmonicWidthRatio = zeros(size(psd,1), 3, 'like', psd);
+harmonicProminenceRatio = zeros(size(psd,1), 3, 'like', psd);
 
 fundamental = estimateFundamentalFreq(psd);
 
-for i = 1:nRows
+for i = 1:size(psd,1)
     % Get features for all peaks
     [peakHeight, peakLoc, peakWidth, peakProminence] = findPeaks(psd(i,:));
 
@@ -58,7 +59,7 @@ for i = 1:nRows
     end
     
     % Compute feature ratios for all n-choose-2 combinations of harmonics
-    for n = 1:nHarmonicCombinations
+    for n = 1:3
         % Get the harmonic numbers we are taking a ratio of
         harmonic1 = harmonicCombinations(n, 1);
         harmonic2 = harmonicCombinations(n, 2);

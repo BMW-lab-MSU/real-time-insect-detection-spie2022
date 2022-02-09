@@ -28,14 +28,14 @@ function features = extractFreqDomainFeatures(X)
 %#codegen
 
 
-NUM_FREQ_FEATURES = 27;
-features = zeros(size(X,1), NUM_FREQ_FEATURES, 'like', X);
+% NUM_FREQ_FEATURES = 27;
+features = zeros(size(X,1), 27, 'like', X);
 nHarmonics = 3;
 
-esd = zeros(size(X));
-oneSidedEsd = zeros(size(X,1), size(X,2)/2);
+esd = zeros(size(X), 'like', X);
+oneSidedEsd = zeros(size(X,1), size(X,2)/2, 'like', X);
 
-spectrum = complex(zeros(size(X)));
+spectrum = complex(zeros(size(X), 'like', X));
 
 % hdlfft doesn't support matrices, only vectors, so we need to process
 % one row at a time.
@@ -54,6 +54,6 @@ oneSidedEsd = esd(:,1:end/2);
 oneSidedEsd = oneSidedEsd./oneSidedEsd(:,1);
 
 features(:,1:6) = extractPsdStats(oneSidedEsd);
-features(:,7:NUM_FREQ_FEATURES) = extractHarmonicFeatures(oneSidedEsd, nHarmonics);
+features(:,7:27) = extractHarmonicFeatures(oneSidedEsd);
 
 end
