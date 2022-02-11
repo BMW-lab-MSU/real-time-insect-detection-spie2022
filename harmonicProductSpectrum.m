@@ -11,7 +11,7 @@ function hps = harmonicProductSpectrum(spectrum, nSpectra)
 
 %#codegen
 
-cols = floor(512/3);
+cols = floor(size(spectrum,2)/3);
 
 
 hps = spectrum(:,1:cols);
