@@ -43,7 +43,7 @@ function [locations] = localMaxima1d(x)
 %   - locations: the indices of each maxima/peak
 
 % preallocate; there can't be more maxima than half the size of x
-locations = zeros(1, floor(numel(x)/2), 'like', x);
+locations = zeros(1, floor(numel(x)/2), 'uint16');
 nPeaksIdx = 1;
 
 
@@ -83,15 +83,16 @@ function [prominences, leftBases, rightBases] = peakProminence(x, locations)
 
 % preallocate
 prominences = zeros(size(locations), 'like', x);
-leftBases = zeros(size(locations), 'like', x);
-rightBases = zeros(size(locations), 'like', x);
+leftBases = zeros(size(locations), 'like', locations);
+rightBases = zeros(size(locations), 'like', locations);
+
+iMin = cast(1, 'like', locations);
+iMax = cast(numel(x), 'like', locations);
 
 for peakNum = 1:numel(locations)
     % locations == 0 means there wasn't a peak, so skip those
     if locations(peakNum) ~= 0
         location = locations(peakNum);
-        iMin = cast(1, 'like', locations);
-        iMax = cast(numel(x), 'like', locations);
 
         % Find the left base in interval [iMin, location]
         leftBases(peakNum) = location;
@@ -99,15 +100,19 @@ for peakNum = 1:numel(locations)
         leftMin = x(location);
 
         leftBorder = iMin;
-        for i = iMin:location-1
-            if x(i) >= x(location)
-                leftBorder = i;
+        for i = iMin:iMax
+            if i < location
+                if x(i) >= x(location)
+                    leftBorder = i;
+                end
             end
         end
-        for i = location:-1:leftBorder
-            if x(i) < leftMin
-                leftMin = x(i);
-                leftBases(peakNum) = i;
+        for i = iMax:-1:iMin
+            if i <= location && i >= leftBorder
+                if x(i) < leftMin
+                    leftMin = x(i);
+                    leftBases(peakNum) = i;
+                end
             end
         end
 
@@ -117,15 +122,19 @@ for peakNum = 1:numel(locations)
         rightMin = x(location);
 
         rightBorder = iMax;
-        for i = iMax:-1:location+1
-            if x(i) >= x(location)
-                rightBorder = i;
+        for i = iMax:-1:iMin
+            if i > location
+                if x(i) >= x(location)
+                    rightBorder = i;
+                end
             end
         end
-        for i = rightBorder:-1:location
-            if x(i) < rightMin
-                rightMin = x(i);
-                rightBases(peakNum) = i;
+        for i = iMax:-1:iMin
+            if i <= rightBorder && i >= location
+                if x(i) < rightMin
+                    rightMin = x(i);
+                    rightBases(peakNum) = i;
+                end
             end
         end
 
@@ -152,11 +161,14 @@ relHeight = 0.5;
 
 widths = zeros(size(locations), 'like', x);
 
+iMin = cast(1, 'like', locations);
+iMax = cast(numel(x), 'like', locations);
+
 for peakNum = 1:numel(locations)
     % locations == 0 means there wasn't a peak, so skip those
     if locations(peakNum) ~= 0
-        iMin = leftBases(peakNum);
-        iMax = rightBases(peakNum);
+        leftBase = leftBases(peakNum);
+        rightBase = rightBases(peakNum);
         location = locations(peakNum);
 
         height = x(location) - prominences(peakNum) * relHeight;
@@ -164,35 +176,39 @@ for peakNum = 1:numel(locations)
         % Find intersection point on left side
         leftIp = cast(iMin, 'like', x);
         done = false;
-        for i = location:-1:iMin
-            if ~done
-                if x(i) <= height
-                    done = true;
-                    leftIp = cast(i, 'like', x);
+        for i = iMax:-1:iMin
+            if i <= location && i >= leftBase
+                if ~done
+                    if x(i) <= height
+                        done = true;
+                        leftIp = cast(i, 'like', x);
+                    end
                 end
             end
         end
         
         if x(leftIp) < height
             % Interpolate if true intersection height is between samples
-            leftIp = leftIp + (height - x(leftIp)) / (x(leftIp + 1) - x(leftIp));
+            leftIp(:) = leftIp + (height - x(leftIp)) / (x(leftIp + 1) - x(leftIp));
         end
 
         % Find intersection point on right side
         rightIp = cast(iMax, 'like', x);
         done = false;
-        for i = location:iMax
-            if ~done
-                if x(i) <= height
-                    done = true;
-                    rightIp = cast(i, 'like', x);
+        for i = iMin:iMax
+            if i >= location && i <= rightBase
+                if ~done
+                    if x(i) <= height
+                        done = true;
+                        rightIp = cast(i, 'like', x);
+                    end
                 end
             end
         end
 
         if x(rightIp) < height
             % Interpolate if true intersection height is between samples
-            rightIp = rightIp - (height - x(rightIp)) / (x(rightIp - 1) - x(rightIp));
+            rightIp(:) = rightIp - (height - x(rightIp)) / (x(rightIp - 1) - x(rightIp));
         end
 
         widths(peakNum) = rightIp - leftIp;
