@@ -25,9 +25,9 @@ stdPsd = stddev(psd, avgPsd);
 medianPsd = codegenMedian(psd);
 madPsd = medianAbsDeviation(psd);
 skewnessPsd = codegenSkewness(psd);
-skewnessPsd = skewnessPsd - mean(skewnessPsd);
+skewnessPsd = skewnessPsd;
 kurtosisPsd = codegenKurtosis(psd);
-kurtosisPsd = kurtosisPsd - mean(kurtosisPsd);
+kurtosisPsd = kurtosisPsd;
 
 
 features(1) = avgPsd;
