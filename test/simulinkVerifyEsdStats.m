@@ -7,13 +7,13 @@ esd = real(spectrum).^2 + imag(spectrum).^2;
 esd = esd(:,1:end/2);
 esd = esd ./ esd(:,1);
 
-expected = zeros(size(esd,1), 6);
+expected = zeros(size(esd,1), 4);
 for i = 1:size(esd,1)
     expected(i,:) = extractPsdStats(esd(i,:));
 end
 
 
-error = abs((expected(:,[1,2,5,6]) - double(outputData(1+latency:end,:)))./expected(:,[1,2,5,6]));
+error = abs((expected - double(outputData(1+latency:end,:)))./expected);
 
 % remove nan's from divide by 0
 error(isnan(error)) = 0;
