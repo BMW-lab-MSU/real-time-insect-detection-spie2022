@@ -16,7 +16,6 @@ function features = extractTimeDomainFeatures(X)
 %#codegen
 
 rowMean = mean(X, 2);
-imageMean = mean(X(:));
 
 rowStd = stddev(X, rowMean);
 
@@ -26,7 +25,7 @@ absFirstDiff = abs(firstDiff);
 
 maxDiff = max(absFirstDiff, [], 2);
 
-features = [rowMean - imageMean, rowStd, maxDiff];
+features = [rowMean, rowStd, maxDiff];
 % features.RowMeanMinusImageMean = rowMean - imageMean;
 % features.StdDev = rowStd;
 % features.MaxDiff = maxDiff;
