@@ -42,7 +42,7 @@ harmonicFeaturesOut = [
 ];
 
 expectedFeatures = [expectedTimeDomainFeatures, expectedEsdStats, expectedHarmonicFeatures];
-featuresOut = [timeDomainFeaturesOut(1+latency:end,:), esdStatsOut(1+latency:end,:), harmonicFeaturesOut];
+featuresOut = [double(timeDomainFeaturesOut(1+latency:end,:)), double(esdStatsOut(1+latency:end,:)), harmonicFeaturesOut];
 
 error = abs((expectedFeatures - featuresOut)./expectedFeatures);
 
