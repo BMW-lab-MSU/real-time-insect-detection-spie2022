@@ -1,6 +1,6 @@
 function [harmonicLocations, harmonicIdx] = findHarmonics(peakLocations, fundamentalLocation, nHarmonics)
 
-nHarmonics = 3;
+% nHarmonics = 3;
 nBins = 2;
 
 harmonicLocations = zeros(nHarmonics, 1, 'like', peakLocations);
