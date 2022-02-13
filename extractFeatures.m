@@ -33,9 +33,9 @@ function features = extractFeatures(X)
 
 %#codegen
 
-features = zeros(size(X,1), 30, 'like', X);
+features = zeros(size(X,1), 28, 'like', X);
 
 features(:,1:3) = extractTimeDomainFeatures(X);
-features(:,4:30) = extractFreqDomainFeatures(X);
+features(:,4:28) = extractFreqDomainFeatures(X);
 
 end

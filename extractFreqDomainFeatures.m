@@ -28,8 +28,8 @@ function features = extractFreqDomainFeatures(X)
 %#codegen
 
 
-% NUM_FREQ_FEATURES = 27;
-features = zeros(size(X,1), 27, 'like', X);
+% NUM_FREQ_FEATURES = 25;
+features = zeros(size(X,1), 25, 'like', X);
 nHarmonics = 3;
 
 esd = zeros(size(X), 'like', X);
@@ -39,12 +39,12 @@ spectrum = complex(zeros(size(X), 'like', X));
 
 % hdlfft doesn't support matrices, only vectors, so we need to process
 % one row at a time.
- for i = 1:size(X,1)
-     % dsp.HDLFFT works on columns, so I have to transpose so the observations
-     % are in columns and then transpose back so they are in rows again.
-     spectrum(i,:) = hdlfft(X(i,:).').';
- end
-%spectrum = fft(X, [], 2);
+% for i = 1:size(X,1)
+%     % dsp.HDLFFT works on columns, so I have to transpose so the observations
+%     % are in columns and then transpose back so they are in rows again.
+%     spectrum(i,:) = hdlfft(X(i,:).').';
+% end
+spectrum = fft(X, [], 2);
 esd = real(spectrum).^2 + imag(spectrum).^2;
 
 % Only look at the positive frequencies
@@ -53,7 +53,7 @@ oneSidedEsd = esd(:,1:end/2);
 % Normalize by the DC component
 oneSidedEsd = oneSidedEsd./oneSidedEsd(:,1);
 
-features(:,1:6) = extractPsdStats(oneSidedEsd);
-features(:,7:27) = extractHarmonicFeatures(oneSidedEsd);
+features(:,1:4) = extractPsdStats(oneSidedEsd);
+features(:,5:25) = extractHarmonicFeatures(oneSidedEsd);
 
 end

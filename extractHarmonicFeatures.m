@@ -42,6 +42,8 @@ harmonicProminenceRatio = zeros(size(psd,1), 3, 'like', psd);
 fundamental = estimateFundamentalFreq(psd);
 
 for i = 1:size(psd,1)
+
+
     % Get features for all peaks
     [peakHeight, peakLoc, peakWidth, peakProminence] = findPeaks(psd(i,:));
 
