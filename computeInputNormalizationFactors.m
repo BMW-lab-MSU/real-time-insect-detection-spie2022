@@ -4,14 +4,12 @@
 
 % SPDX-License-Identifier: BSD-3-Clause
 
-DATADIR = "../../data/insect-lidar/training";
+DATADIR = "../../data/insect-lidar/codegen-training";
 load(DATADIR + filesep + "trainingData", "trainingFeatures")
 
 trainingFeatures = nestedcell2mat(trainingFeatures);
 
-trainingMean = varfun(@(feature) mean(feature, 'omitnan'), trainingFeatures,...
-    'OutputFormat', 'uniform');
-trainingStd = varfun(@(feature) std(feature, 'omitnan'), trainingFeatures,...
-    'OutputFormat', 'uniform');
+trainingMean = mean(trainingFeatures, 1);
+trainingStd = std(trainingFeatures, 0, 1);
 
 save(DATADIR + filesep + "trainingNormalizationFactors", 'trainingMean', 'trainingStd', '-v7.3')

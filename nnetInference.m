@@ -5,7 +5,7 @@ persistent WEIGHTS
 persistent trainingMean
 persistent trainingStd
 
-BASEDIR = "/vol/data/research/afrl/data/insect-lidar/training";
+BASEDIR = "/vol/data/research/afrl/data/insect-lidar/codegen-training";
 MODELDIR = BASEDIR + filesep + "models";
 
 if isempty(WEIGHTS)
@@ -25,7 +25,7 @@ x0 = ((data - trainingMean)./trainingStd)';
 
 s1 = WEIGHTS{1} * x0 + BIASES{1};
 
-x1 = tanh(s1);
+x1 = 1./(1 + exp(-s1));
 
 s2 = WEIGHTS{2} * x1 + BIASES{2};
 

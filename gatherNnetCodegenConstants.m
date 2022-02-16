@@ -2,8 +2,8 @@
 % to make using the HDL Coder easier.
 % https://www.mathworks.com/help/hdlcoder/ug/load-constants-from-a-mat-file.html
 
-load('/vol/data/research/afrl/data/insect-lidar/training/models/nnet')
-load('/vol/data/research/afrl/data/insect-lidar/training/trainingNormalizationFactors')
+load('/vol/data/research/afrl/data/insect-lidar/codegen-training/models/nnet')
+load('/vol/data/research/afrl/data/insect-lidar/codegen-training/trainingNormalizationFactors')
 
 % transpose so we can keep the input data as a row vector
 weightsLayer1 = model.LayerWeights{1}';
