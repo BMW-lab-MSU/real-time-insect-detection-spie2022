@@ -24,6 +24,6 @@ save([datadir filesep 'codegen-training' filesep 'samplingTuningNet.mat'], 'resu
 
 %% Model fitting function
 function model = nnet(data, labels, ~)
-    model = compact(fitcnet(data, labels, 'LayerSizes', [25], ...
+    model = compact(fitcnet(data, labels, 'LayerSizes', [100], ...
         'Standardize', true));
 end

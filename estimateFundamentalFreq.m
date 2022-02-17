@@ -11,9 +11,14 @@ function fundamental = estimateFundamentalFreq(psd)
 
 %#codegen
 
+fundamental = zeros(size(psd,1), 1, 'like', psd);
+
 hps = harmonicProductSpectrum(psd, 3);
-[heights, locs] = findPeaks(hps);
-[~,maxPeakIdx] = max(heights);
-fundamental = locs(maxPeakIdx);
+
+for i = 1:numel(fundamental)
+    [heights, locs] = findPeaks(hps(i,:));
+    [~,maxPeakIdx] = max(heights);
+    fundamental(i) = locs(maxPeakIdx);
+end
 
 end
