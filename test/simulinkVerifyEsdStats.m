@@ -1,19 +1,17 @@
 % one sample period of latency because of the zero-order-hold rate
 % transition, and another one because of how Simulink works?
-latency = 2;
+latency = 1;
 
-spectrum = fft(double(testData), [], 2);
-esd = real(spectrum).^2 + imag(spectrum).^2;
-esd = esd(:,1:end/2);
-esd = esd ./ esd(:,1);
+
 
 expected = zeros(size(esd,1), 4);
 for i = 1:size(esd,1)
-    expected(i,:) = extractPsdStats(esd(i,:));
+    expected(i,:) = extractPsdStats(single(esd(i,:)));
 end
 
+results = [single(meanOut), single(stdOut), single(skewnessOut), single(kurtosisOut)];
 
-error = abs((expected - double(outputData(1+latency:end,:)))./expected);
+error = abs((expected - results(1+latency:end,:))./expected);
 
 % remove nan's from divide by 0
 error(isnan(error)) = 0;
