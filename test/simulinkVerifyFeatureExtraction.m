@@ -2,7 +2,7 @@
 % transition, and another one because of how Simulink works?
 latency = 2;
 
-spectrum = fft(double(testData), [], 2);
+spectrum = fft(single(testData), [], 2);
 esd = real(spectrum).^2 + imag(spectrum).^2;
 esd = esd(:,1:end/2);
 esd = esd ./ esd(:,1);
@@ -17,18 +17,22 @@ end
 
 expectedTimeDomainFeatures = extractTimeDomainFeatures(double(testData));
 
+timeDomainFeaturesOut = [single(meanOut), single(stdOut), single(maxDiffOut)];
+
+esdStatsOut = [single(meanEsdOut), single(stdEsdOut), single(skewnessEsdOut), single(kurtosisEsdOut)];
+
 harmonicFeaturesOut = [
-    double(harmonicHeightsOut(1+latency:end, :)),...
-    double(harmonicWidthsOut(1+latency:end, :)),...
-    double(harmonicProminencesOut(1+latency:end, :)),...
-    double(harmonicHeightRatiosOut(1+latency:end, :)),...
-    double(harmonicWidthRatiosOut(1+latency:end, :)),...
-    double(harmonicProminenceRatiosOut(1+latency:end, :)),...
-    double(harmonicLocationsOut(1+latency:end, :))
+    single(harmonicHeightsOut(1+latency:end, :)),...
+    single(harmonicWidthsOut(1+latency:end, :)),...
+    single(harmonicProminencesOut(1+latency:end, :)),...
+    single(harmonicHeightRatiosOut(1+latency:end, :)),...
+    single(harmonicWidthRatiosOut(1+latency:end, :)),...
+    single(harmonicProminenceRatiosOut(1+latency:end, :)),...
+    single(harmonicLocationsOut(1+latency:end, :))
 ];
 
 expectedFeatures = [expectedTimeDomainFeatures, expectedEsdStats, expectedHarmonicFeatures];
-featuresOut = [double(timeDomainFeaturesOut(1+latency:end,:)), double(esdStatsOut(1+latency:end,:)), harmonicFeaturesOut];
+featuresOut = [timeDomainFeaturesOut(1+latency:end,:), esdStatsOut(1+latency:end,:), harmonicFeaturesOut];
 
 error = abs((expectedFeatures - featuresOut)./expectedFeatures);
 
