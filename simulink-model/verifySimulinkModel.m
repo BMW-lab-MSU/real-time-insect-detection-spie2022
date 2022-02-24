@@ -1,6 +1,6 @@
 latency = 2;
 
-baseDir = "../../data/insect-lidar";
+baseDir = "../../../data/insect-lidar";
 testingDataDir = baseDir + filesep + "codegen-testing";
 
 load(testingDataDir + filesep + "expectedLabels")
