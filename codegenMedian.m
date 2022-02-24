@@ -20,7 +20,7 @@ for i = 1:numel(x)
         else
             % Take the average of the two median values; avoid division-by-2
             % by shifting right by 1.
-            m = bitsra(m + x(i), 1);
+            m(:) = bitsra(m + x(i), 1);
         end
     end
 end

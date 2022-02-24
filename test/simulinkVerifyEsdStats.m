@@ -4,10 +4,9 @@ latency = 1;
 
 
 
-expected = zeros(size(esd,1), 4);
-for i = 1:size(esd,1)
-    expected(i,:) = extractPsdStats(single(esd(i,:)));
-end
+
+expected = extractPsdStats(esd);
+
 
 results = [single(meanOut), single(stdOut), single(skewnessOut), single(kurtosisOut)];
 

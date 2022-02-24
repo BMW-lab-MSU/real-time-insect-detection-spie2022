@@ -1,7 +1,11 @@
 % testData = fi([1:1024; 2*(1:1024)]);
 % testData = single([1:1024; 2*(1:1024)]);
 % testData = rand(2,1024, 'single');
-testData = fi(rand(2,1024, 'single'), 0, 27, 26);
+% testData = fi(rand(2,1024, 'single'), 0, 27, 26);
+
+observationIndices = [insectLabels];
+
+testData = fi(data(observationIndices, :), 0, 27, 26);
 
 
 

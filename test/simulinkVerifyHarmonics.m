@@ -2,8 +2,7 @@
 latency = 1;
 
 
-expected(1,:) = extractHarmonicFeatures(single(esd(1,:)));
-expected(2,:) = extractHarmonicFeatures(single(esd(2,:)));
+expected = extractHarmonicFeatures(esd);
 
 
 featuresOut = [
@@ -17,6 +16,10 @@ featuresOut = [
 ];
 
 error = abs((expected - featuresOut)./expected);
+
+% don't divide by 0 when the expected feature is 0
+z = expected == 0;
+error(z) = abs(expected(z) - featuresOut(z));
 
 assert(all(error < 1e-2, 'all'), 'verification failed')
 disp(['verification passed: max error = ' num2str(max(error(:)))])

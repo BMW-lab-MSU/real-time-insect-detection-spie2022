@@ -1,10 +1,11 @@
 latency = 1;
 
 baseDir = "../../../data/insect-lidar";
+testingDataDir = baseDir + filesep + "codegen-testing";
 
-load(baseDir + "/codegen-training/models/nnet")
+load(testingDataDir + filesep + "expectedLabels")
 
-expectedLabels = predict(model, inputFeatures);
+expectedLabels = expectedLabels(observationIndices);
 
 assert(all(expectedLabels == predictedLabels(1+latency:end)), 'verification failed')
 disp(['verification passed'])

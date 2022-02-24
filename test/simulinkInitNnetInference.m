@@ -1,6 +1,7 @@
 insectLabels = find(humanLabels);
 
-inputFeatures = [testingFeatures(insectLabels,:); testingFeatures([10,10000,20,40,100],:)];
+observationIndices = [(1:1e3)'; insectLabels];
+inputFeatures = extractFeatures(testingData(observationIndices,:));
 
 % Using all 3444252 observations takes too long to simulate
 % inputFeatures = testingFeatures;
