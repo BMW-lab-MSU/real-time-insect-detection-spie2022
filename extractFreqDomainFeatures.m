@@ -37,13 +37,6 @@ oneSidedEsd = zeros(size(X,1), size(X,2)/2, 'like', X);
 
 spectrum = complex(zeros(size(X), 'like', X));
 
-% hdlfft doesn't support matrices, only vectors, so we need to process
-% one row at a time.
-% for i = 1:size(X,1)
-%     % dsp.HDLFFT works on columns, so I have to transpose so the observations
-%     % are in columns and then transpose back so they are in rows again.
-%     spectrum(i,:) = hdlfft(X(i,:).').';
-% end
 spectrum = fft(X, [], 2);
 esd = real(spectrum).^2 + imag(spectrum).^2;
 
