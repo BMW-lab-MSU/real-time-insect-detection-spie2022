@@ -22,7 +22,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin3 = sin(2 * pi * 3 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3;
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -48,7 +48,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin3 = sin(2 * pi * 3 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3;
 
-            expectedPeakLoc = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3] + 1);
+            expectedPeakLoc = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -57,7 +57,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
 
             [~, peakLocations] = findpeaks(psd);
             
-            expectedIdx = find(sum(peakLocations == expectedPeakLoc)).';
+            expectedIdx = find(sum(peakLocations == expectedPeakLoc.'));
 
 
             [resultPeakLoc, resultIdx] = findHarmonics(peakLocations, fundamentalLoc, nHarmonics);
@@ -78,7 +78,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin3 = sin(2 * pi * 3 * fundamentalFreq * t + pi/6);
             x = sin1 + sin2 + sin3;
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3] + 1);
             % expected = [101; 201; 301];
 
             psd = abs(fft(x)).^2;
@@ -105,7 +105,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin3 = sin(2 * pi * 3 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3;
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -133,7 +133,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin5 = sin(2 * pi * 5 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3 + sin4 + sin5;
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3; 4; 5] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3, 4, 5] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -161,7 +161,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin5 = sin(2 * pi * 5 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3 + sin4 + sin5 + rand(size(t));
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2; 3; 4; 5] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2, 3, 4, 5] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -207,6 +207,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
         %     % results need to be within 3 bins; that's what the findHarmonics algorithm looks for
         %     testCase.verifyEqual(result, expected, "AbsTol", 3);
         % end
+        
         function testOddHarmonics(testCase)
 
             nHarmonics = 3;
@@ -220,7 +221,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin5 = sin(2 * pi * 5 * fundamentalFreq * t);
             x = sin1 +  sin3 + sin5;
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 0; 3] + [1; 0; 1]);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 0, 3] + [1, 0, 1]);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
@@ -249,7 +250,7 @@ classdef FindHarmonicsTests < matlab.unittest.TestCase
             sin5 = sin(2 * pi * 5 * fundamentalFreq * t);
             x = sin1 + sin2 + sin3 + sin4 + sin5 + rand(size(t));
 
-            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1; 2] + 1);
+            expected = round(numel(t) / samplingFreq * fundamentalFreq * [1, 2] + 1);
 
             psd = abs(fft(x)).^2;
             psd = psd(1:floor(end/2));
