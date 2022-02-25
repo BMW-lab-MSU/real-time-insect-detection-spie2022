@@ -1,0 +1,1 @@
+`insectDetectionSimulation.slx` is the main Simulink model; all of the other `.slx` files are referenced subsystems that the main model references. The `.m` files are callbacks used by the Simulink model.
